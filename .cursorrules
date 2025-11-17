@@ -1,0 +1,130 @@
+# SOBRA - Cursor Rules
+
+## Proyecto Overview
+SOBRA es una aplicación de gestión financiera personal construida con Next.js 15 y Supabase.
+
+## Stack Técnico
+- Frontend: Next.js 15 (App Router), TypeScript, TailwindCSS, shadcn/ui
+- Backend: Supabase (PostgreSQL, Auth, RLS)
+- Estado: TanStack Query v5
+- Validación: Zod + React Hook Form
+
+## Convenciones de Código
+
+### TypeScript
+- Usar tipos explícitos, evitar `any`
+- Preferir interfaces para objetos, types para uniones
+- Exportar tipos desde `types/index.ts`
+
+### Componentes React
+- Usar 'use client' solo cuando sea necesario
+- Preferir Server Components por defecto
+- Componentes en PascalCase
+- Props con interface explícita
+
+### Hooks
+- Prefijo `use` obligatorio
+- Hooks de datos en `hooks/use-*.ts`
+- Retornar objetos con nombres descriptivos
+
+### Estilos
+- TailwindCSS para todo el styling
+- Usar componentes shadcn/ui cuando sea posible
+- Clases ordenadas: layout → spacing → typography → colors
+
+### Validación
+- Schemas Zod en `lib/validators/index.ts`
+- Validar en cliente (UX) y servidor (seguridad)
+- Mensajes de error en español
+
+### Supabase
+- RLS siempre habilitado
+- Políticas owner-only por defecto
+- Índices en columnas de búsqueda
+- Usar tipos generados en `types/database.types.ts`
+
+### Data Fetching
+- TanStack Query para todas las queries
+- Invalidar queries después de mutaciones
+- Toasts para feedback de mutaciones
+- Manejar loading y error states
+
+### Estructura de Archivos
+```
+app/          → Rutas Next.js
+components/   → Componentes React
+hooks/        → Hooks personalizados
+lib/          → Lógica de negocio
+types/        → Tipos TypeScript
+supabase/     → Migraciones SQL
+```
+
+## Patrones a Seguir
+
+### CRUD Pattern
+```typescript
+// hooks/use-entity.ts
+export function useEntities() { /* query */ }
+export function useCreateEntity() { /* mutation */ }
+export function useUpdateEntity() { /* mutation */ }
+export function useDeleteEntity() { /* mutation */ }
+```
+
+### Form Pattern
+```typescript
+// components/forms/entity-form.tsx
+- Usar React Hook Form
+- Resolver con Zod
+- Props: entity?, onSuccess?
+- Modo create/edit según props
+```
+
+### Page Pattern
+```typescript
+// app/(app)/entity/page.tsx
+- Lista con estado vacío
+- Diálogo para create/edit
+- Confirmación para delete
+- Loading y error states
+```
+
+## Reglas Específicas
+
+### NO hacer
+- ❌ Exponer service_role_key al cliente
+- ❌ Usar `any` en TypeScript
+- ❌ Lógica de negocio en componentes
+- ❌ Queries sin índices en BD
+- ❌ Mutar estado sin invalidar queries
+- ❌ Console.logs en producción
+
+### SÍ hacer
+- ✅ Funciones puras para lógica de negocio
+- ✅ Separar UI de lógica
+- ✅ Validar inputs con Zod
+- ✅ Manejar errores gracefully
+- ✅ Toasts para feedback
+- ✅ Loading spinners
+
+## Comandos Útiles
+```bash
+npm run dev              # Desarrollo
+npm run build            # Build
+npm run lint             # Linter
+npm run type-check       # TypeScript
+npm run supabase:types   # Generar tipos
+```
+
+## Referencias
+- README.md - Documentación principal
+- ARCHITECTURE.md - Arquitectura técnica
+- DATABASE.md - Esquema de BD
+- EXAMPLES.md - Ejemplos de código
+
+## Prioridades
+1. Seguridad (RLS, validación)
+2. Type-safety (TypeScript estricto)
+3. UX (loading, errores, feedback)
+4. Performance (índices, caché)
+5. Mantenibilidad (código limpio, documentado)
+
