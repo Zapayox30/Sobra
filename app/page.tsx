@@ -1,364 +1,315 @@
+import type { ReactNode } from 'react'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Logo } from '@/components/brand/logo'
-import { DollarSign, TrendingDown, Target, Wallet, CheckCircle2, Shield, Zap, TrendingUp, ArrowRight } from 'lucide-react'
 import type { Metadata } from 'next'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Logo } from '@/components/brand/logo'
+import {
+  ArrowRight,
+  CheckCircle2,
+  DollarSign,
+  Shield,
+  Zap,
+  TrendingUp,
+  Wallet,
+  Calendar,
+  Target,
+  TrendingDown,
+} from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Calcula lo que te Sobra | Gestión Financiera Personal Gratis',
+  title: 'SOBRA | Calcula lo que te sobra cada mes',
   description:
-    'Descubre cuánto te sobra mensualmente después de tus ingresos y gastos. Calculadora financiera personal gratis para tomar control de tu dinero. Sin tarjeta de crédito.',
-  keywords: [
-    'calculadora de finanzas personales',
-    'cuánto me sobra mensual',
-    'presupuesto personal gratis',
-    'control de gastos',
-    'gestión financiera online',
-    'calculadora de ahorro',
-    'presupuesto mensual español'
-  ],
-  openGraph: {
-    title: 'SOBRA - Calcula lo que te Sobra Después de tus Gastos',
-    description: 'Gestiona tus finanzas personales de forma simple. Descubre cuánto te sobra mensualmente. 100% gratis.',
-    type: 'website',
-  },
+    'Gestiona tus ingresos, gastos y compromisos desde un panel intuitivo. Calcula cuánto dinero te sobra y optimiza tu presupuesto en minutos.',
 }
 
-// Schema.org JSON-LD para SEO
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
   name: 'SOBRA',
-  description: 'Calcula cuánto te sobra mensualmente después de tus ingresos y gastos. Gestión financiera personal simple y gratis.',
+  description:
+    'Calculadora de finanzas personales para registrar ingresos, gastos y obtener una sugerencia diaria de gasto.',
   url: 'https://sobra.app',
-  applicationCategory: 'FinanceApplication',
-  operatingSystem: 'Web',
   offers: {
     '@type': 'Offer',
     price: '0',
     priceCurrency: 'EUR',
   },
-  featureList: [
-    'Calculadora de ingresos y gastos',
-    'Gestión de presupuesto mensual',
-    'Seguimiento de compromisos financieros',
-    'Cálculo automático de dinero disponible',
-  ],
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '5',
-    ratingCount: '1',
-  },
 }
+
+const heroHighlights = [
+  {
+    title: 'Ingresos registrados',
+    value: '1 200 €',
+    caption: 'Promedio mensual',
+    icon: <Wallet className="h-5 w-5" />,
+  },
+  {
+    title: 'Gasto diario sugerido',
+    value: '40 €',
+    caption: 'Dinero disponible hoy',
+    icon: <Calendar className="h-5 w-5" />,
+  },
+]
+
+const benefits = [
+  {
+    title: 'Control total',
+    description: 'Visualiza ingresos, gastos fijos, presupuestos y compromisos en un solo panel.',
+    icon: <TrendingUp />,
+  },
+  {
+    title: 'Sin fricciones',
+    description: 'Registra operaciones en segundos desde web o móvil. Nada de hojas de cálculo.',
+    icon: <Zap />,
+  },
+  {
+    title: 'Siempre gratis',
+    description: 'Planea tus finanzas personales sin tarjetas de crédito ni comisiones.',
+    icon: <Shield />,
+  },
+]
+
+const useCases = [
+  {
+    title: 'Control mensual',
+    description: 'Lleva un seguimiento claro de cuánto entra, cuánto sale y a qué ritmo estás gastando.',
+    bullet: 'Ideal para freelancers, personas con ingresos variables y familias.',
+  },
+  {
+    title: 'Presupuestos personales',
+    description: 'Crea sobres digitales para categorías como ocio, pareja, amigos o viajes.',
+    bullet: 'Define límites, compara contra lo previsto y recibe alertas visuales.',
+  },
+  {
+    title: 'Compromisos y metas',
+    description: 'Agenda pagos futuros, ahorro para vacaciones o amortización de deudas.',
+    bullet: 'SOBRA te muestra cuánto dinero queda libre después de cumplir con ellos.',
+  },
+]
+
+const steps = [
+  {
+    title: 'Agrega tus ingresos',
+    description: 'Sueldo, freelance, inversiones. Todo suma al cálculo mensual.',
+    icon: <DollarSign />,
+  },
+  {
+    title: 'Registra tus gastos fijos',
+    description: 'Alquiler, servicios, suscripciones y cualquier pago recurrente.',
+    icon: <TrendingDown />,
+  },
+  {
+    title: 'Define compromisos y metas',
+    description: 'Ahorros programados, deudas o inversiones a corto plazo.',
+    icon: <Target />,
+  },
+  {
+    title: 'Descubre cuánto te sobra',
+    description: 'Obtén tu dinero disponible y una sugerencia de gasto diario.',
+    icon: <Wallet />,
+  },
+]
+
+const faqs = [
+  {
+    question: '¿Necesito tarjeta para usar SOBRA?',
+    answer: 'No. SOBRA es gratuito. Solo necesitas una dirección de correo electrónico para registrarte.',
+  },
+  {
+    question: '¿Mis datos son privados?',
+    answer:
+      'Sí. Todos los datos están protegidos en Supabase con RLS (Row Level Security). Solo tú puedes ver tu información.',
+  },
+  {
+    question: '¿Puedo exportar mis datos?',
+    answer: 'Pronto podrás descargar tus registros en CSV para analizarlos donde prefieras.',
+  },
+]
 
 export default function HomePage() {
   return (
     <>
-      {/* Schema.org JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      
-              <div className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <header className="container mx-auto px-4 py-24 text-center relative overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-brand opacity-10 rounded-full blur-3xl animate-pulse-green" />
-        <div className="absolute bottom-10 right-10 w-96 h-96 bg-gradient-accent opacity-10 rounded-full blur-3xl animate-pulse-green" style={{ animationDelay: '1s' }} />
-        
-        <div className="relative z-10">
-          {/* Logo */}
-          <div className="flex justify-center mb-8 animate-fade-in-up">
-            <Logo size="xl" href="/" />
-          </div>
-          
-          <h1 className="text-4xl md:text-5xl lg:text-6xl text-foreground mb-4 max-w-4xl mx-auto font-bold leading-tight">
-            Descubre cuánto te <span className="text-primary">sobra</span> después de tus gastos mensuales
-          </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
-            Calcula tu dinero disponible con nuestra calculadora de finanzas personales. Toma control de tu presupuesto en minutos.
-          </p>
-          <p className="text-lg text-muted-foreground mb-12 max-w-2xl mx-auto">
-            Gestiona tus ingresos, gastos fijos y compromisos financieros. Descubre cuánto puedes gastar diariamente sin preocupaciones.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
-            <Button asChild size="lg" className="gradient-brand hover:opacity-90 transition-opacity shadow-lg hover-lift text-lg px-8 py-6">
-              <Link href="/register">
-                Comenzar Gratis 🚀
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="hover-lift border-2 border-primary text-lg px-8 py-6">
-              <Link href="/login">
-                Iniciar Sesión
-              </Link>
-            </Button>
-          </div>
-          
-          <div className="flex flex-wrap gap-6 justify-center items-center text-sm text-muted-foreground">
-            <span className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-green-600" />
-              Gratis para siempre
-            </span>
-            <span className="flex items-center gap-2">
-              <Shield className="h-4 w-4 text-purple-600" />
-              Sin tarjeta de crédito
-            </span>
-            <span className="flex items-center gap-2">
-              <Zap className="h-4 w-4 text-yellow-600" />
-              Setup en 2 minutos
-            </span>
-          </div>
-        </div>
-      </header>
-
-      {/* Benefits Section */}
-      <section aria-label="Beneficios de SOBRA" className="container mx-auto px-4 py-16 bg-card/40">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-primary">
-            ¿Por qué elegir SOBRA?
-          </h2>
-          <p className="text-center text-muted-foreground mb-12 text-lg max-w-2xl mx-auto">
-            La herramienta más simple para gestionar tus finanzas personales
-          </p>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="hover-lift border-border/60 bg-card/80">
-              <CardHeader>
-                <div className="rounded-xl bg-primary/20 text-primary p-3 w-fit mb-2">
-                  <Shield className="h-6 w-6" />
-                </div>
-                <CardTitle className="text-xl">100% Gratis</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  Sin costos ocultos, sin tarjeta de crédito requerida. Gestiona tus finanzas sin límites de tiempo.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="hover-lift border-border/60 bg-card/80">
-              <CardHeader>
-                <div className="rounded-xl bg-accent/20 text-accent p-3 w-fit mb-2">
-                  <Zap className="h-6 w-6" />
-                </div>
-                <CardTitle className="text-xl">Súper Rápido</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  Configura tu cuenta en menos de 2 minutos. Interfaz intuitiva para calcular tu presupuesto al instante.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="hover-lift border-border/60 bg-card/80">
-              <CardHeader>
-                <div className="rounded-xl bg-emerald-500/20 text-emerald-300 p-3 w-fit mb-2">
-                  <TrendingUp className="h-6 w-6" />
-                </div>
-                <CardTitle className="text-xl">Control Total</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  Visualiza todos tus ingresos, gastos y compromisos en un solo lugar. Toma decisiones informadas.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section aria-label="Cómo funciona SOBRA" className="container mx-auto px-4 py-24">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-primary">
-          ¿Cómo funciona?
-        </h2>
-        <p className="text-center text-muted-foreground mb-4 text-lg">
-          4 simples pasos para tomar control de tus finanzas personales
-        </p>
-        <p className="text-center text-muted-foreground mb-16 max-w-2xl mx-auto">
-          Descubre cómo calcular cuánto te sobra mensualmente después de tus ingresos y gastos
-        </p>
-        
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <article className="hover-lift card-glow border-border/60 bg-card/80 relative overflow-hidden group">
-            <div className="absolute top-0 right-0 text-9xl font-bold text-muted/40 opacity-50 group-hover:opacity-70 transition-opacity">1</div>
-            <CardContent className="pt-6 relative z-10">
-              <div className="rounded-xl bg-primary/20 text-primary p-4 w-fit mb-4 shadow-md">
-                <DollarSign className="h-8 w-8" />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <div className="relative min-h-screen overflow-hidden bg-background">
+        <div className="pointer-events-none absolute left-0 top-0 hidden h-96 w-96 -translate-x-1/3 -translate-y-1/2 rounded-full bg-gradient-brand opacity-20 blur-3xl md:block" />
+        <div className="pointer-events-none absolute right-0 bottom-0 hidden h-[28rem] w-[32rem] translate-x-1/3 translate-y-1/3 rounded-full bg-gradient-accent opacity-10 blur-3xl md:block" />
+        <main className="mx-auto flex max-w-6xl flex-col gap-16 px-4 pb-16 pt-16 sm:px-6 lg:px-10">
+          <section className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+            <div className="space-y-6 text-center lg:text-left">
+              <div className="flex justify-center lg:justify-start">
+                <Logo size="xl" href="/" />
               </div>
-              <h3 className="font-bold mb-3 text-lg text-foreground">Agrega tus ingresos</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Registra tu sueldo mensual y cualquier ingreso extra. Calcula el total de tus ingresos fácilmente.
+              <p className="text-sm font-semibold uppercase tracking-[0.4em] text-muted-foreground">
+                Finanzas personales sin complicaciones
               </p>
-            </CardContent>
-          </article>
-
-          <article className="hover-lift card-glow border-border/60 bg-card/80 relative overflow-hidden group">
-            <div className="absolute top-0 right-0 text-9xl font-bold text-muted/40 opacity-50 group-hover:opacity-70 transition-opacity">2</div>
-            <CardContent className="pt-6 relative z-10">
-              <div className="rounded-xl bg-destructive/25 text-destructive-foreground p-4 w-fit mb-4 shadow-md">
-                <TrendingDown className="h-8 w-8" />
+              <h1 className="text-4xl font-semibold leading-tight text-foreground sm:text-5xl lg:text-6xl">
+                Descubre cuánto dinero te <span className="text-primary">sobra</span> cada mes
+              </h1>
+              <p className="text-lg text-muted-foreground sm:text-xl">
+                Calcula tu dinero disponible, gestiona presupuestos y compromisos en minutos. Sin tarjetas, sin
+    publicidad, 100% gratis.
+              </p>
+              <div className="flex flex-col gap-4 sm:flex-row sm:justify-start">
+                <Button asChild size="lg" className="w-full rounded-2xl bg-gradient-brand px-8 py-6 text-base font-semibold sm:w-auto">
+                  <Link href="/register">Comenzar gratis 🚀</Link>
+                </Button>
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="w-full rounded-2xl border border-white/30 px-8 py-6 text-base sm:w-auto"
+                >
+                  <Link href="/login">Iniciar sesión</Link>
+                </Button>
               </div>
-              <h3 className="font-bold mb-3 text-lg text-foreground">Registra tus gastos</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Añade tus gastos fijos recurrentes (alquiler, servicios) y presupuestos personales categorizados.
-              </p>
-            </CardContent>
-          </article>
-
-          <article className="hover-lift card-glow border-border/60 bg-card/80 relative overflow-hidden group">
-            <div className="absolute top-0 right-0 text-9xl font-bold text-muted/40 opacity-50 group-hover:opacity-70 transition-opacity">3</div>
-            <CardContent className="pt-6 relative z-10">
-              <div className="rounded-xl bg-accent/20 text-accent p-4 w-fit mb-4 shadow-md">
-                <Target className="h-8 w-8" />
+              <div className="flex flex-wrap justify-center gap-3 text-sm text-muted-foreground lg:justify-start">
+                <Tag icon={<CheckCircle2 className="h-4 w-4 text-green-400" />}>Gratis para siempre</Tag>
+                <Tag icon={<Shield className="h-4 w-4 text-purple-400" />}>Sin tarjeta requerida</Tag>
+                <Tag icon={<Zap className="h-4 w-4 text-amber-400" />}>Listo en 2 minutos</Tag>
               </div>
-              <h3 className="font-bold mb-3 text-lg text-foreground">Define compromisos</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Establece metas de ahorro o pagos programados con fechas específicas. Planifica tus compromisos financieros.
-              </p>
-            </CardContent>
-          </article>
-
-          <article className="hover-lift card-glow border-border/60 bg-card/80 relative overflow-hidden group">
-            <div className="absolute top-0 right-0 text-9xl font-bold text-muted/40 opacity-50 group-hover:opacity-70 transition-opacity">4</div>
-            <CardContent className="pt-6 relative z-10">
-              <div className="rounded-xl bg-primary/20 text-primary p-4 w-fit mb-4 shadow-md">
-                <Wallet className="h-8 w-8" />
+            </div>
+            <div className="space-y-4 rounded-3xl border border-white/10 bg-card/70 p-6 shadow-2xl backdrop-blur">
+              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-muted-foreground">Resumen</p>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {heroHighlights.map((item) => (
+                  <Card key={item.title} className="border-white/10 bg-background/50 text-left">
+                    <CardHeader className="gap-2">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/20 text-primary">
+                        {item.icon}
+                      </div>
+                      <CardTitle className="text-sm">{item.title}</CardTitle>
+                      <p className="text-2xl font-semibold text-foreground">{item.value}</p>
+                      <p className="text-xs text-muted-foreground">{item.caption}</p>
+                    </CardHeader>
+                  </Card>
+                ))}
               </div>
-              <h3 className="font-bold mb-3 text-lg text-foreground">Ve cuánto te SOBRA</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Descubre tu dinero disponible mensual y recibe una sugerencia de gasto diario para mantenerte dentro del presupuesto.
-              </p>
-            </CardContent>
-          </article>
-        </div>
-      </section>
+            </div>
+          </section>
 
-      {/* FAQ Section */}
-      <section aria-label="Preguntas frecuentes" className="container mx-auto px-4 py-24 bg-card/30">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-primary">
-            Preguntas Frecuentes
-          </h2>
-          <p className="text-center text-muted-foreground mb-12 text-lg">
-            Todo lo que necesitas saber sobre SOBRA
-          </p>
-          
-          <div className="space-y-6">
-            <Card className="border-border/70 bg-card">
-              <CardHeader>
-                <CardTitle className="text-lg">¿Es realmente gratis?</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  Sí, SOBRA es 100% gratuito y siempre lo será. No requerimos tarjeta de crédito ni tienes límites de tiempo para usar la aplicación.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-border/70 bg-card">
-              <CardHeader>
-                <CardTitle className="text-lg">¿Cómo calcula cuánto me sobra?</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  SOBRA toma tus ingresos totales, resta tus gastos fijos, gastos personales y compromisos mensuales. El resultado es tu dinero disponible, que dividimos entre los días del mes para darte una sugerencia de gasto diario.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-border/70 bg-card">
-              <CardHeader>
-                <CardTitle className="text-lg">¿Mis datos están seguros?</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  Absolutamente. Usamos Supabase con encriptación de extremo a extremo. Tus datos financieros son privados y solo tú puedes acceder a ellos. No compartimos tu información con terceros.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-border/70 bg-card">
-              <CardHeader>
-                <CardTitle className="text-lg">¿Puedo usar SOBRA desde mi móvil?</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  Sí, SOBRA es una aplicación web responsive que funciona perfectamente en móviles, tablets y ordenadores. Accede desde cualquier dispositivo con conexión a internet.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section aria-label="Call to action" className="container mx-auto px-4 py-24 text-center">
-        <div className="max-w-3xl mx-auto">
-          <Card className="border-2 border-border/60 bg-gradient-to-br from-card via-background to-accent/30 card-glow p-8 md:p-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-primary">
-              Comienza a gestionar tus finanzas hoy
-            </h2>
-            <p className="text-lg text-muted-foreground mb-4 leading-relaxed">
-              Es <strong className="text-foreground">gratis</strong>, <strong className="text-foreground">simple</strong> y te tomará menos de <strong className="text-foreground">2 minutos</strong> configurar tu cuenta.
-            </p>
-            <p className="text-base text-muted-foreground mb-8">
-              Sin trucos, sin tarjeta de crédito requerida. Toma control de tu dinero ahora mismo.
-            </p>
-            <Button asChild size="lg" className="gradient-brand hover:opacity-90 transition-opacity shadow-lg hover-lift text-lg px-10 py-7 group">
-              <Link href="/register" className="flex items-center gap-2">
-                🎯 Crear Cuenta Gratis
-                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </Button>
-          </Card>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-border/60 bg-card/40 py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
-            <div>
-              <h3 className="font-bold text-lg mb-4 text-foreground">SOBRA</h3>
-              <p className="text-sm text-muted-foreground">
-                Calcula cuánto te sobra mensualmente después de tus ingresos y gastos. Gestión financiera personal simple y gratis.
+          <section className="space-y-12" id="beneficios">
+            <div className="space-y-4 text-center">
+              <p className="text-sm uppercase tracking-[0.4em] text-muted-foreground">Beneficios</p>
+              <h2 className="text-3xl font-semibold text-foreground sm:text-4xl">Todo lo que necesitas en un panel</h2>
+              <p className="mx-auto max-w-3xl text-lg text-muted-foreground">
+                Centraliza ingresos, gastos fijos, presupuestos personales y compromisos en un solo lugar. Tu dinero,
+                claro y disponible.
               </p>
             </div>
-            <div>
-              <h3 className="font-bold text-lg mb-4 text-foreground">Enlaces</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>
-                  <Link href="/login" className="hover:text-foreground transition-colors">
-                    Iniciar Sesión
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/register" className="hover:text-foreground transition-colors">
-                    Registrarse
-                  </Link>
-                </li>
-              </ul>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {benefits.map((benefit) => (
+                <Card key={benefit.title} className="border border-white/10 bg-card/70 text-left">
+                  <CardHeader className="space-y-4">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                      {benefit.icon}
+                    </div>
+                    <CardTitle>{benefit.title}</CardTitle>
+                    <p className="text-sm text-muted-foreground">{benefit.description}</p>
+                  </CardHeader>
+                </Card>
+              ))}
             </div>
-            <div>
-              <h3 className="font-bold text-lg mb-4 text-foreground">Sobre</h3>
-              <p className="text-sm text-muted-foreground">
-                SOBRA es una herramienta gratuita para gestionar tus finanzas personales. Calcula tu presupuesto y toma control de tu dinero.
+          </section>
+
+          <section className="space-y-10" id="para-que-sirve">
+            <div className="space-y-4 text-center">
+              <p className="text-sm uppercase tracking-[0.4em] text-muted-foreground">¿Para qué sirve?</p>
+              <h2 className="text-3xl font-semibold text-foreground sm:text-4xl">
+                SOBRA te ayuda a tomar mejores decisiones
+              </h2>
+              <p className="mx-auto max-w-3xl text-lg text-muted-foreground">
+                Define tu salario disponible, separa un presupuesto por categoría y cumple con tus compromisos sin
+                sacrificar tus metas personales.
               </p>
             </div>
-          </div>
-          <div className="border-t border-border/60 pt-8 text-center text-sm text-muted-foreground">
-            <p>© {new Date().getFullYear()} SOBRA. Todos los derechos reservados.</p>
-            <p className="mt-2 text-xs text-muted-foreground">
-              Calculadora de finanzas personales | Gestión de presupuesto | Control de gastos
-            </p>
-          </div>
-        </div>
-      </footer>
-    </div>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {useCases.map((useCase) => (
+                <Card key={useCase.title} className="border border-white/10 bg-card/70 text-left">
+                  <CardHeader className="space-y-3">
+                    <CardTitle>{useCase.title}</CardTitle>
+                    <CardDescription>{useCase.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-muted-foreground">
+                      {useCase.bullet}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </section>
+
+          <section className="space-y-10" id="como-funciona">
+            <div className="space-y-4 text-center">
+              <p className="text-sm uppercase tracking-[0.4em] text-muted-foreground">Flujo</p>
+              <h2 className="text-3xl font-semibold text-foreground sm:text-4xl">4 pasos sencillos</h2>
+            </div>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {steps.map((step, index) => (
+                <article key={step.title} className="relative overflow-hidden rounded-2xl border border-white/10 bg-card/80 p-6 shadow-lg">
+                  <span className="absolute right-5 top-4 text-6xl font-black text-muted/40">{index + 1}</span>
+                  <div className="space-y-4">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                      {step.icon}
+                    </div>
+                    <h3 className="text-lg font-semibold text-foreground">{step.title}</h3>
+                    <p className="text-sm text-muted-foreground">{step.description}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]" id="faq">
+            <Card className="border-white/10 bg-card/70">
+              <CardHeader>
+                <CardTitle className="text-2xl">Preguntas frecuentes</CardTitle>
+                <CardDescription>Todo lo que necesitas saber antes de comenzar.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-5">
+                {faqs.map((faq) => (
+                  <details key={faq.question} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <summary className="cursor-pointer list-none text-base font-semibold text-foreground">
+                      {faq.question}
+                    </summary>
+                    <p className="mt-2 text-sm text-muted-foreground">{faq.answer}</p>
+                  </details>
+                ))}
+              </CardContent>
+            </Card>
+            <Card className="border border-white/10 bg-gradient-to-br from-card via-background to-accent/20 text-center shadow-2xl">
+              <CardHeader className="space-y-4">
+                <CardTitle className="text-3xl">Comienza hoy mismo</CardTitle>
+                <CardDescription className="text-lg text-muted-foreground">
+                  Configura tu cuenta y descubre cuánto te sobra al instante.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <Button asChild size="lg" className="w-full rounded-2xl bg-gradient-brand text-base font-semibold">
+                  <Link href="/register">Crear cuenta gratis</Link>
+                </Button>
+                <p className="text-sm text-muted-foreground">
+                  También puedes{' '}
+                  <Link href="/login" className="text-primary underline-offset-4 hover:underline">
+                    iniciar sesión
+                  </Link>{' '}
+                  si ya tienes una cuenta.
+                </p>
+              </CardContent>
+            </Card>
+          </section>
+        </main>
+      </div>
     </>
+  )
+}
+
+function Tag({ children, icon }: { children: ReactNode; icon: ReactNode }) {
+  return (
+    <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs text-muted-foreground">
+      {icon}
+      {children}
+    </span>
   )
 }

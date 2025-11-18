@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Sidebar } from '@/components/layout/sidebar'
+import { MobileNav } from '@/components/layout/mobile-nav'
 
 export const metadata: Metadata = {
   title: {
@@ -15,13 +16,20 @@ export const metadata: Metadata = {
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex bg-background">
-      <div className="sticky top-0 h-screen">
-        <Sidebar />
+    <div className="min-h-screen bg-background">
+      <div className="lg:hidden sticky top-0 z-50">
+        <MobileNav />
       </div>
-      <main className="flex-1 h-screen overflow-y-auto bg-background">
-        <div className="px-4 py-6 md:px-10 md:py-10 min-h-full">{children}</div>
-      </main>
+      <div className="flex">
+        <div className="sticky top-0 hidden h-screen lg:block">
+          <Sidebar />
+        </div>
+        <main className="flex-1 bg-background">
+          <div className="px-4 py-6 pt-20 md:px-10 md:py-10 lg:pt-10">
+            {children}
+          </div>
+        </main>
+      </div>
     </div>
   )
 }
