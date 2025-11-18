@@ -16,6 +16,7 @@ import { useIncomes, useDeleteIncome } from '@/hooks/use-incomes'
 import { useProfile } from '@/hooks/use-user'
 import { useMonthlyCalculation } from '@/hooks/use-calculation'
 import { formatCurrency } from '@/lib/finance/calc'
+import { useI18n } from '@/lib/i18n/context'
 import { DollarSign, Plus, Trash2, Edit, TrendingUp, AlertTriangle } from 'lucide-react'
 import { Database } from '@/types/database.types'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -27,6 +28,7 @@ export default function IncomesPage() {
   const { data: profile } = useProfile()
   const { calculation, isLoading: isLoadingCalc } = useMonthlyCalculation()
   const deleteIncome = useDeleteIncome()
+  const { t } = useI18n()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editingIncome, setEditingIncome] = useState<Income | undefined>()
 
@@ -60,17 +62,17 @@ export default function IncomesPage() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Ingresos</h1>
-          <p className="text-muted-foreground">
-            Gestiona tus fuentes de ingreso
+          <h1 className="text-3xl font-semibold text-foreground">{t.incomes.title}</h1>
+          <p className="text-muted-foreground mt-1 text-sm">
+            {t.incomes.manageIncome}
           </p>
         </div>
-        <Button onClick={handleCreate}>
+        <Button onClick={handleCreate} size="sm">
           <Plus className="mr-2 h-4 w-4" />
-          Nuevo Ingreso
+          {t.incomes.newIncome}
         </Button>
       </div>
 
@@ -78,60 +80,58 @@ export default function IncomesPage() {
       {incomes && incomes.length > 0 && (
         <div className="grid gap-4 md:grid-cols-2">
           {/* Card: Total de Ingresos */}
-          <Card className="hover-lift border-gray-200 bg-gradient-to-br from-gray-50 to-white">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-900">
-                Ingresos Mensuales Totales
+          <Card className="border-border/70 hover:shadow-md transition-shadow">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                {t.incomes.totalActive}
               </CardTitle>
-              <div className="p-2 bg-gray-100 rounded-lg">
-                <TrendingUp className="h-4 w-4 text-gray-700" />
+              <div className="p-1.5 bg-accent/20 text-accent rounded-md">
+                <TrendingUp className="h-3.5 w-3.5" />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-4xl font-bold text-gray-900">
+              <div className="text-3xl font-semibold text-foreground">
                 {formatCurrency(totalIncomeActive, currency)}
               </div>
-              <p className="text-xs text-gray-600 mt-2 font-medium">
-                {incomes.filter(i => i.is_active).length} fuente(s) activa(s)
+              <p className="text-xs text-muted-foreground mt-2">
+                {incomes.filter(i => i.is_active).length} {t.incomes.activeSources}
               </p>
             </CardContent>
           </Card>
 
           {/* Card: Balance Final / Alerta */}
           {calculation && (
-            <Card className={`hover-lift border-2 ${
+            <Card className={`border-border/70 hover:shadow-md transition-shadow ${
               isNegativeBalance 
-                ? 'border-red-200 bg-gradient-to-br from-red-50 to-white' 
-                : 'border-purple-200 bg-gradient-to-br from-purple-50 to-white'
+                ? 'border-destructive/60' 
+                : 'border-border/70'
             }`}>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className={`text-sm font-medium ${
-                  isNegativeBalance ? 'text-red-900' : 'text-purple-900'
-                }`}>
-                  Balance Después de Gastos
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  {t.incomes.balance}
                 </CardTitle>
-                <div className={`p-2 rounded-lg ${
-                  isNegativeBalance ? 'bg-red-100' : 'bg-purple-100'
+                <div className={`p-1.5 rounded-md ${
+                  isNegativeBalance ? 'bg-destructive/25 text-destructive-foreground' : 'bg-emerald-500/20 text-emerald-300'
                 }`}>
                   {isNegativeBalance ? (
-                    <AlertTriangle className="h-4 w-4 text-red-600" />
+                    <AlertTriangle className="h-3.5 w-3.5" />
                   ) : (
-                    <DollarSign className="h-4 w-4 text-purple-600" />
+                    <TrendingUp className="h-3.5 w-3.5" />
                   )}
                 </div>
               </CardHeader>
               <CardContent>
-                <div className={`text-4xl font-bold ${
-                  isNegativeBalance ? 'text-red-700' : 'text-purple-700'
+                <div className={`text-3xl font-semibold ${
+                  isNegativeBalance ? 'text-red-600' : 'text-foreground'
                 }`}>
                   {formatCurrency(calculation.leftoverAfterPersonal, currency)}
                 </div>
-                <p className={`text-xs mt-2 font-medium ${
-                  isNegativeBalance ? 'text-red-600' : 'text-purple-600'
+                <p className={`text-xs mt-2 ${
+                  isNegativeBalance ? 'text-red-600' : 'text-muted-foreground'
                 }`}>
                   {isNegativeBalance 
-                    ? '⚠️ Gastas más de lo que ganas' 
-                    : '✅ Tu presupuesto está equilibrado'}
+                    ? t.incomes.negativeBalance
+                    : t.incomes.positiveBalance}
                 </p>
               </CardContent>
             </Card>
@@ -141,17 +141,17 @@ export default function IncomesPage() {
 
       {/* Alerta si está en negativo */}
       {isNegativeBalance && calculation && (
-        <Alert variant="destructive" className="border-2">
+        <Alert variant="destructive" className="border border-destructive/60">
           <AlertTriangle className="h-5 w-5" />
-          <AlertTitle className="text-lg font-bold">¡Atención! Presupuesto en Negativo</AlertTitle>
-          <AlertDescription className="text-base">
-            Tus gastos totales ({formatCurrency(calculation.fixedTotal + calculation.personalTotal, currency)}) 
-            superan tus ingresos ({formatCurrency(totalIncomeActive, currency)}). 
+          <AlertTitle className="text-lg font-semibold">{t.incomes.negativeAlertTitle}</AlertTitle>
+          <AlertDescription className="text-sm">
+            {t.incomes.negativeAlertMessage
+              .replace('{totalExpenses}', formatCurrency(calculation.fixedTotal + calculation.personalTotal, currency))
+              .replace('{totalIncome}', formatCurrency(totalIncomeActive, currency))
+              .replace('{deficit}', formatCurrency(Math.abs(calculation.leftoverAfterPersonal), currency))}
             <br />
-            <strong>Déficit: {formatCurrency(Math.abs(calculation.leftoverAfterPersonal), currency)}</strong>
-            <br />
-            <span className="text-sm mt-2 block">
-              💡 Considera reducir gastos o buscar ingresos adicionales para equilibrar tu presupuesto.
+            <span className="text-xs mt-2 block">
+              💡 {t.incomes.suggestion}
             </span>
           </AlertDescription>
         </Alert>
@@ -160,10 +160,10 @@ export default function IncomesPage() {
       {!incomes || incomes.length === 0 ? (
         <EmptyState
           icon={DollarSign}
-          title="No tienes ingresos registrados"
-          description="Comienza agregando tu sueldo o cualquier otra fuente de ingreso"
+          title={t.incomes.noIncomes}
+          description={t.incomes.noIncomesDescription}
           action={{
-            label: 'Agregar Ingreso',
+            label: t.incomes.addIncome,
             onClick: handleCreate,
           }}
         />
@@ -224,7 +224,7 @@ export default function IncomesPage() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {editingIncome ? 'Editar Ingreso' : 'Nuevo Ingreso'}
+              {editingIncome ? `${t.common.edit} ${t.incomes.title}` : t.incomes.newIncome}
             </DialogTitle>
           </DialogHeader>
           <IncomeForm income={editingIncome} onSuccess={handleSuccess} />

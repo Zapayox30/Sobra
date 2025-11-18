@@ -96,8 +96,8 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <Card className="w-full max-w-2xl">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background">
+      <Card className="w-full max-w-2xl border-border/70 shadow-md bg-card/90 backdrop-blur">
         <CardHeader className="space-y-1">
           <CardTitle className="text-3xl font-bold text-center">
             ¡Bienvenido a SOBRA!
@@ -140,10 +140,11 @@ export default function OnboardingPage() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="USD">USD ($)</SelectItem>
-                          <SelectItem value="EUR">EUR (€)</SelectItem>
-                          <SelectItem value="MXN">MXN ($)</SelectItem>
-                          <SelectItem value="ARS">ARS ($)</SelectItem>
+                          <SelectItem value="USD">🇺🇸 USD ($) - Dólar Estadounidense</SelectItem>
+                          <SelectItem value="EUR">🇪🇺 EUR (€) - Euro</SelectItem>
+                          <SelectItem value="MXN">🇲🇽 MXN ($) - Peso Mexicano</SelectItem>
+                          <SelectItem value="ARS">🇦🇷 ARS ($) - Peso Argentino</SelectItem>
+                          <SelectItem value="PEN">🇵🇪 PEN (S/) - Sol Peruano</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />

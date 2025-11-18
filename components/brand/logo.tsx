@@ -51,7 +51,7 @@ export function Logo({
         </div>
       </div>
       {showText && (
-        <span className={cn("font-bold text-gradient", sizes.text)}>
+        <span className={cn("font-bold text-foreground", sizes.text)}>
           SOBRA
         </span>
       )}

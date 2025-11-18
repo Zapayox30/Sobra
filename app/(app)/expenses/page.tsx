@@ -22,6 +22,7 @@ import {
 import { useProfile } from '@/hooks/use-user'
 import { formatCurrency } from '@/lib/finance/calc'
 import { TrendingDown, Plus, Trash2, Edit } from 'lucide-react'
+import { useI18n } from '@/lib/i18n/context'
 import { Database } from '@/types/database.types'
 
 type FixedExpense = Database['public']['Tables']['fixed_expenses']['Row']
@@ -34,6 +35,7 @@ export default function ExpensesPage() {
   const { data: profile } = useProfile()
   const deleteFixed = useDeleteFixedExpense()
   const deletePersonal = useDeletePersonalExpense()
+  const { t } = useI18n()
 
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [dialogType, setDialogType] = useState<'fixed' | 'personal'>('fixed')
@@ -68,11 +70,11 @@ export default function ExpensesPage() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Gastos</h1>
-        <p className="text-muted-foreground">
-          Gestiona tus gastos fijos y presupuestos personales
+        <h1 className="text-3xl font-semibold text-foreground">{t.expenses.title}</h1>
+        <p className="text-muted-foreground mt-1 text-sm">
+          {t.expenses.subtitle}
         </p>
       </div>
 

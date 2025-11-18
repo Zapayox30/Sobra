@@ -163,7 +163,18 @@ export function calculateMonthlySobra({
  * Formatea un monto como moneda
  */
 export function formatCurrency(amount: Money, currency = 'USD'): string {
-  return new Intl.NumberFormat('es-ES', {
+  // Mapeo de locales según moneda para mejor formato
+  const localeMap: Record<string, string> = {
+    USD: 'en-US',
+    EUR: 'es-ES',
+    MXN: 'es-MX',
+    ARS: 'es-AR',
+    PEN: 'es-PE',
+  }
+  
+  const locale = localeMap[currency] || 'es-ES'
+  
+  return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency,
   }).format(amount)

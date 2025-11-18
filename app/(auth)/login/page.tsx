@@ -26,6 +26,8 @@ import {
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 
+// Metadata se maneja en el layout.tsx de (auth)
+
 export default function LoginPage() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
@@ -61,8 +63,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background">
+      <Card className="w-full max-w-md border-border/70 shadow-md bg-card/90 backdrop-blur">
         <CardHeader className="space-y-1">
           <CardTitle className="text-3xl font-bold text-center">
             SOBRA
@@ -112,7 +114,7 @@ export default function LoginPage() {
             </form>
           </Form>
 
-          <div className="mt-4 text-center text-sm">
+          <div className="mt-4 text-center text-sm text-muted-foreground">
             ¿No tienes cuenta?{' '}
             <Link href="/register" className="text-primary hover:underline">
               Regístrate

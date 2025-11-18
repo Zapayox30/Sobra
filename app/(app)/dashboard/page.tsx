@@ -5,6 +5,7 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner'
 import { useMonthlyCalculation } from '@/hooks/use-calculation'
 import { useProfile } from '@/hooks/use-user'
 import { formatCurrency } from '@/lib/finance/calc'
+import { useI18n } from '@/lib/i18n/context'
 import {
   DollarSign,
   TrendingDown,
@@ -16,6 +17,7 @@ import {
 export default function DashboardPage() {
   const { data: profile } = useProfile()
   const { calculation, isLoading } = useMonthlyCalculation()
+  const { t } = useI18n()
 
   if (isLoading) {
     return <LoadingSpinner />
@@ -24,62 +26,61 @@ export default function DashboardPage() {
   const currency = (profile as any)?.currency || 'USD'
 
   return (
-    <div className="space-y-8 animate-fade-in-up">
+    <div className="space-y-6 animate-fade-in-up">
       <div>
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-          Dashboard
+        <h1 className="text-3xl font-semibold text-foreground">
+          {t.dashboard.title}
         </h1>
-        <p className="text-muted-foreground mt-1">
-          Resumen de tu situación financiera actual
+        <p className="text-muted-foreground mt-1 text-sm">
+          {t.dashboard.subtitle}
         </p>
       </div>
 
       {calculation && (
         <>
           {/* Main SOBRA Card */}
-          <Card className="border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-purple-50/20 card-glow overflow-hidden relative">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-accent opacity-10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-            <CardHeader className="relative">
-              <CardTitle className="text-2xl flex items-center gap-3">
-                <div className="p-2 bg-gradient-brand rounded-lg shadow-lg">
-                  <Wallet className="h-6 w-6 text-white" />
+          <Card className="border border-border/70 bg-card overflow-hidden relative">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-xl flex items-center gap-2.5 font-semibold text-foreground">
+                <div className="p-1.5 bg-primary/20 text-primary rounded-md">
+                  <Wallet className="h-4 w-4" />
                 </div>
-                <span className="text-gradient">Lo que te SOBRA</span>
+                <span>{t.dashboard.leftover}</span>
               </CardTitle>
             </CardHeader>
-            <CardContent className="relative">
+            <CardContent>
               <div className="space-y-6">
                 <div>
-                  <p className="text-sm text-muted-foreground font-medium mb-2">
-                    Después de gastos personales
+                  <p className="text-sm text-muted-foreground mb-2">
+                    {t.dashboard.afterPersonal}
                   </p>
                   <p
-                    className={`text-6xl font-bold tracking-tight ${
+                    className={`text-5xl font-semibold tracking-tight ${
                       calculation.leftoverAfterPersonal >= 0
-                        ? 'text-gray-900 drop-shadow-lg'
-                        : 'text-destructive'
+                        ? 'text-foreground'
+                        : 'text-red-600'
                     }`}
                   >
                     {formatCurrency(calculation.leftoverAfterPersonal, currency)}
                   </p>
                 </div>
 
-                <div className="pt-6 border-t-2 border-gray-200">
+                <div className="pt-5 border-t border-border/60">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-muted-foreground font-medium mb-1">
-                        Sugerencia diaria
+                      <p className="text-sm text-muted-foreground mb-1">
+                        {t.dashboard.dailySuggestion}
                       </p>
-                      <p className="text-3xl font-bold text-purple-600">
+                      <p className="text-2xl font-semibold text-foreground">
                         {formatCurrency(calculation.dailySuggestion, currency)}
-                        <span className="text-lg text-muted-foreground ml-2">/ día</span>
+                        <span className="text-base text-muted-foreground ml-2">{t.dashboard.perDay}</span>
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm text-muted-foreground font-medium mb-1">
-                        Días restantes
+                      <p className="text-sm text-muted-foreground mb-1">
+                        {t.dashboard.remainingDays}
                       </p>
-                      <p className="text-3xl font-bold text-gray-900">
+                      <p className="text-2xl font-semibold text-foreground">
                         {calculation.remainingDays}
                       </p>
                     </div>
@@ -90,131 +91,131 @@ export default function DashboardPage() {
           </Card>
 
           {/* Summary Cards */}
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            <Card className="hover-lift border-gray-200 bg-gradient-to-br from-gray-50 to-white">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-gray-900">
-                  Ingresos Totales
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <Card className="border-border/70 hover:shadow-md transition-shadow">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  {t.dashboard.incomeTotal}
                 </CardTitle>
-                <div className="p-2 bg-gray-100 rounded-lg">
-                  <DollarSign className="h-4 w-4 text-gray-700" />
+                <div className="p-1.5 bg-emerald-500/20 text-emerald-300 rounded-md">
+                  <DollarSign className="h-3.5 w-3.5" />
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-gray-900">
+                <div className="text-2xl font-semibold text-foreground">
                   {formatCurrency(calculation.incomeTotal, currency)}
                 </div>
-                <p className="text-xs text-gray-600 mt-1 font-medium">
+                <p className="text-xs text-muted-foreground mt-1.5">
                   +100% base
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="hover-lift border-red-200 bg-gradient-to-br from-red-50 to-white">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-red-900">
-                  Gastos Fijos
+            <Card className="border-border/70 hover:shadow-md transition-shadow">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  {t.dashboard.fixedExpenses}
                 </CardTitle>
-                <div className="p-2 bg-red-100 rounded-lg">
-                  <TrendingDown className="h-4 w-4 text-red-600" />
+                <div className="p-1.5 bg-destructive/25 text-destructive-foreground rounded-md">
+                  <TrendingDown className="h-3.5 w-3.5" />
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-red-700">
+                <div className="text-2xl font-semibold text-foreground">
                   {formatCurrency(calculation.fixedTotal, currency)}
                 </div>
-                <p className="text-xs text-red-600 mt-1 font-medium">
+                <p className="text-xs text-muted-foreground mt-1.5">
                   {calculation.incomeTotal > 0 
-                    ? `${((calculation.fixedTotal / calculation.incomeTotal) * 100).toFixed(0)}% del ingreso`
-                    : 'Sin ingresos'}
+                    ? `${((calculation.fixedTotal / calculation.incomeTotal) * 100).toFixed(0)}${t.dashboard.percentageOfIncome}`
+                    : t.dashboard.noIncome}
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="hover-lift border-purple-200 bg-gradient-to-br from-purple-50 to-white">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-purple-900">
-                  Compromisos
+            <Card className="border-border/70 hover:shadow-md transition-shadow">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  {t.dashboard.commitments}
                 </CardTitle>
-                <div className="p-2 bg-purple-100 rounded-lg">
-                  <Target className="h-4 w-4 text-purple-600" />
+                <div className="p-1.5 bg-accent/20 text-accent rounded-md">
+                  <Target className="h-3.5 w-3.5" />
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-purple-700">
+                <div className="text-2xl font-semibold text-foreground">
                   {formatCurrency(calculation.commitmentsTotal, currency)}
                 </div>
-                <p className="text-xs text-purple-600 mt-1 font-medium">
-                  Ahorros programados
+                <p className="text-xs text-muted-foreground mt-1.5">
+                  {t.dashboard.scheduledSavings}
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="hover-lift border-gray-300 bg-gradient-to-br from-gray-100 to-white">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-gray-900">
-                  Presupuesto Personal
+            <Card className="border-border/70 hover:shadow-md transition-shadow">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  {t.dashboard.personalBudget}
                 </CardTitle>
-                <div className="p-2 bg-gray-200 rounded-lg">
-                  <Calendar className="h-4 w-4 text-gray-700" />
+                <div className="p-1.5 bg-muted rounded-md">
+                  <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-gray-800">
+                <div className="text-2xl font-semibold text-foreground">
                   {formatCurrency(calculation.personalTotal, currency)}
                 </div>
-                <p className="text-xs text-gray-600 mt-1 font-medium">
-                  Gastos variables
+                <p className="text-xs text-muted-foreground mt-1.5">
+                  {t.dashboard.variableExpenses}
                 </p>
               </CardContent>
             </Card>
           </div>
 
           {/* Breakdown */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Desglose Mensual</CardTitle>
+          <Card className="border-border/70">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-lg font-semibold text-foreground">{t.dashboard.monthlyBreakdown}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">Ingresos totales</span>
-                  <span className="font-semibold text-green-600">
+                <div className="flex justify-between items-center py-1.5">
+                  <span className="text-sm text-muted-foreground">{t.dashboard.totalIncomes}</span>
+                  <span className="font-medium text-foreground">
                     + {formatCurrency(calculation.incomeTotal, currency)}
                   </span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">Gastos fijos</span>
-                  <span className="font-semibold text-red-600">
+                <div className="flex justify-between items-center py-1.5">
+                  <span className="text-sm text-muted-foreground">{t.dashboard.fixedExpensesLabel}</span>
+                  <span className="font-medium text-foreground">
                     - {formatCurrency(calculation.fixedTotal, currency)}
                   </span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">Compromisos mensuales</span>
-                  <span className="font-semibold text-red-600">
+                <div className="flex justify-between items-center py-1.5">
+                  <span className="text-sm text-muted-foreground">{t.dashboard.monthlyCommitments}</span>
+                  <span className="font-medium text-foreground">
                     - {formatCurrency(calculation.commitmentsTotal, currency)}
                   </span>
                 </div>
-                <div className="border-t pt-3 flex justify-between items-center">
-                  <span className="font-medium">Sobrante antes de personales</span>
-                  <span className="font-bold text-lg">
+                <div className="border-t border-border/60 pt-3 mt-2 flex justify-between items-center">
+                  <span className="font-medium text-muted-foreground">{t.dashboard.leftoverBeforePersonal}</span>
+                  <span className="font-semibold text-foreground">
                     {formatCurrency(calculation.leftoverBeforePersonal, currency)}
                   </span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">Presupuesto personal</span>
-                  <span className="font-semibold text-red-600">
+                <div className="flex justify-between items-center py-1.5">
+                  <span className="text-sm text-muted-foreground">{t.dashboard.personalBudgetLabel}</span>
+                  <span className="font-medium text-foreground">
                     - {formatCurrency(calculation.personalTotal, currency)}
                   </span>
                 </div>
-                <div className="border-t pt-3 flex justify-between items-center">
-                  <span className="font-medium text-lg">
-                    Lo que te SOBRA
+                <div className="border-t border-border/60 pt-3 mt-2 flex justify-between items-center">
+                  <span className="font-semibold text-foreground">
+                    {t.dashboard.leftover}
                   </span>
                   <span
-                    className={`font-bold text-2xl ${
+                    className={`font-bold text-xl ${
                       calculation.leftoverAfterPersonal >= 0
-                        ? 'text-green-600'
+                        ? 'text-foreground'
                         : 'text-red-600'
                     }`}
                   >
