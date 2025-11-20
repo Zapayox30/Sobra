@@ -228,4 +228,93 @@
                 0 4px 12px rgba(0, 0, 0, 0.12),
                 0 0 30px rgba(0, 0, 0, 0.08);
   }
+  
+  /* ===== MOBILE OPTIMIZATION UTILITIES ===== */
+  
+  /* Touch Target - Minimum 44x44px for accessibility */
+  .touch-target {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Optimized for touch devices - prevents 300ms delay */
+  .touch-optimized {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Mobile-specific padding */
+  .mobile-padding {
+    padding: 1rem;
+  }
+  
+  /* Mobile-optimized text sizes */
+  .mobile-text-sm {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+  
+  .mobile-text-base {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  
+  /* Improved hover for touch devices - only apply on non-touch */
+  @media (hover: hover) and (pointer: fine) {
+    .hover-lift:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .card-glow:hover {
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12),
+                  0 4px 12px rgba(0, 0, 0, 0.12),
+                  0 0 30px rgba(0, 0, 0, 0.08);
+    }
+  }
+  
+  /* Mobile-specific adjustments for small screens */
+  @media (max-width: 640px) {
+    /* Slightly larger base font for readability */
+    body {
+      font-size: 16px; /* Prevents iOS zoom on focus */
+    }
+    
+    /* Reduce large titles on mobile */
+    h1 {
+      font-size: 2rem;
+      line-height: 1.2;
+    }
+    
+    h2 {
+      font-size: 1.5rem;
+      line-height: 1.3;
+    }
+    
+    /* Optimize padding for mobile */
+    .container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    
+    /* Make buttons more prominent on mobile */
+    button, .button, [role="button"] {
+      min-height: 44px;
+      padding: 0.75rem 1.25rem;
+    }
+  }
+  
+  /* Extra small devices optimization */
+  @media (max-width: 375px) {
+    h1 {
+      font-size: 1.75rem;
+    }
+    
+    h2 {
+      font-size: 1.35rem;
+    }
+  }
 }

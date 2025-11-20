@@ -119,6 +119,22 @@ export default function RootLayout({
   return (
     <html lang="es" className="dark">
       <head>
+        {/* Mobile Viewport Optimization */}
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
+        
+        {/* Theme Color for Mobile Browsers */}
+        <meta name="theme-color" content="#0f1115" media="(prefers-color-scheme: dark)" />
+        <meta name="theme-color" content="#fafaf9" media="(prefers-color-scheme: light)" />
+        
+        {/* PWA Manifest */}
+        <link rel="manifest" href="/manifest.json" />
+        
+        {/* Apple Touch Icons */}
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="SOBRA" />
+        
         {/* Organization Schema.org JSON-LD */}
         <script
           type="application/ld+json"

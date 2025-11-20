@@ -39,9 +39,10 @@ export function MobileNav() {
       <div className="flex items-center justify-between px-4 py-3">
         <Logo size="md" href="/dashboard" />
         <button
-          className="rounded-full border border-white/20 p-2 text-white transition hover:bg-white/10"
+          className="touch-target touch-optimized rounded-full border border-white/20 p-2 text-white transition hover:bg-white/10"
           onClick={() => setOpen((prev) => !prev)}
-          aria-label="Abrir menú"
+          aria-label={open ? "Cerrar menú de navegación" : "Abrir menú de navegación"}
+          aria-expanded={open}
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
@@ -57,9 +58,9 @@ export function MobileNav() {
                   key={item.href}
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className={`flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium ${
-                    active ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'
-                  }`}
+                  className={`touch-target touch-optimized flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium ${active ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'
+                    }`}
+                  aria-current={active ? 'page' : undefined}
                 >
                   <Icon className="h-4 w-4" />
                   {item.name}
@@ -70,8 +71,9 @@ export function MobileNav() {
 
           <Link
             href="/incomes"
-            className="flex items-center justify-center gap-2 rounded-xl bg-gradient-brand px-4 py-3 text-sm font-semibold text-white"
+            className="touch-target touch-optimized flex items-center justify-center gap-2 rounded-xl bg-gradient-brand px-4 py-3 text-sm font-semibold text-white"
             onClick={() => setOpen(false)}
+            aria-label="Agregar nuevo ingreso"
           >
             <PlusCircle className="h-4 w-4" />
             {t.incomes.addIncome}
@@ -88,15 +90,17 @@ export function MobileNav() {
             <div className="mt-3 space-y-2">
               <Link
                 href="/settings"
-                className="flex items-center justify-between rounded-xl px-2 py-2 hover:bg-white/10"
+                className="touch-target touch-optimized flex items-center justify-between rounded-xl px-2 py-2 hover:bg-white/10"
                 onClick={() => setOpen(false)}
+                aria-label="Ir a configuración"
               >
                 <span>{t.nav.settings}</span>
                 <span className="text-xs text-white/60">Ajustes</span>
               </Link>
               <button
-                className="flex w-full items-center gap-2 rounded-xl px-2 py-2 text-left hover:bg-white/10"
+                className="touch-target touch-optimized flex w-full items-center gap-2 rounded-xl px-2 py-2 text-left hover:bg-white/10"
                 onClick={handleLogout}
+                aria-label="Cerrar sesión"
               >
                 <LogOut className="h-4 w-4" />
                 {t.nav.logout}

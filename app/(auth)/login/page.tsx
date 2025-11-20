@@ -25,6 +25,8 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
+import { GoogleAuthButton } from '@/components/auth/google-auth-button'
+import { AuthDivider } from '@/components/auth/auth-divider'
 
 // Metadata se maneja en el layout.tsx de (auth)
 
@@ -114,6 +116,10 @@ export default function LoginPage() {
             </form>
           </Form>
 
+          <AuthDivider />
+
+          <GoogleAuthButton mode="login" />
+
           <div className="mt-4 text-center text-sm text-muted-foreground">
             ¿No tienes cuenta?{' '}
             <Link href="/register" className="text-primary hover:underline">
@@ -125,4 +131,3 @@ export default function LoginPage() {
     </div>
   )
 }
-

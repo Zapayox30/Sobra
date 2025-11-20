@@ -36,11 +36,32 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
+  // Rutas públicas que no requieren autenticación
+  const publicPaths = [
+    '/',
+    '/login',
+    '/register',
+    '/onboarding',
+  ]
+  
+  const isPublicPath = publicPaths.some(path => 
+    request.nextUrl.pathname === path || 
+    request.nextUrl.pathname.startsWith('/auth')
+  )
+  
+  // Si no hay usuario y la ruta no es pública, redirigir a login
+  // PERO solo si la ruta es una ruta protegida (dashboard, incomes, expenses, etc.)
+  const isProtectedPath = request.nextUrl.pathname.startsWith('/dashboard') ||
+    request.nextUrl.pathname.startsWith('/incomes') ||
+    request.nextUrl.pathname.startsWith('/expenses') ||
+    request.nextUrl.pathname.startsWith('/commitments') ||
+    request.nextUrl.pathname.startsWith('/settings') ||
+    request.nextUrl.pathname.startsWith('/profile')
+  
   if (
     !user &&
-    !request.nextUrl.pathname.startsWith('/login') &&
-    !request.nextUrl.pathname.startsWith('/register') &&
-    !request.nextUrl.pathname.startsWith('/auth')
+    !isPublicPath &&
+    isProtectedPath
   ) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone()

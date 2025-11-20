@@ -25,6 +25,8 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
+import { GoogleAuthButton } from '@/components/auth/google-auth-button'
+import { AuthDivider } from '@/components/auth/auth-divider'
 
 // Metadata se maneja en el layout.tsx de (auth)
 
@@ -81,6 +83,10 @@ export default function RegisterPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          <GoogleAuthButton mode="register" />
+
+          <AuthDivider />
+
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
@@ -160,4 +166,3 @@ export default function RegisterPage() {
     </div>
   )
 }
-
