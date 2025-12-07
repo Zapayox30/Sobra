@@ -4,22 +4,30 @@ import './globals.css'
 import { QueryProvider } from '@/lib/providers/query-provider'
 import { I18nProvider } from '@/lib/i18n/context'
 import { Toaster } from '@/components/ui/sonner'
+import { WebVitalsReporter } from '@/components/analytics/web-vitals-reporter'
 
+// Font optimization: preload, display swap, adjust size
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
+  display: 'swap',
+  preload: true,
+  adjustFontFallback: true,
 })
 
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
+  display: 'swap',
+  preload: true,
+  adjustFontFallback: true,
 })
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://sobra.app'),
   title: {
     default: 'SOBRA - Gestiona tus Finanzas Personales | Calcula lo que te Sobra',
-    template: '%s | SOBRA'
+    template: '%s | SOBRA',
   },
   description:
     'Calcula cuánto te sobra después de tus ingresos y gastos mensuales. Gestión financiera personal simple, gratis y sin tarjeta de crédito. Toma control de tu dinero en minutos.',
@@ -35,7 +43,7 @@ export const metadata: Metadata = {
     'finanzas en español',
     'gestión de dinero',
     'SOBRA',
-    'calculadora financiera'
+    'calculadora financiera',
   ],
   authors: [{ name: 'SOBRA' }],
   creator: 'SOBRA',
@@ -96,7 +104,8 @@ const organizationJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'SOBRA',
-  description: 'Calcula cuánto te sobra mensualmente después de tus ingresos y gastos. Gestión financiera personal simple y gratis.',
+  description:
+    'Calcula cuánto te sobra mensualmente después de tus ingresos y gastos. Gestión financiera personal simple y gratis.',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://sobra.app',
   logo: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://sobra.app'}/logo.png`,
   sameAs: [
@@ -117,33 +126,33 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="es" className="dark">
+    <html lang="es" className="dark" suppressHydrationWarning>
       <head>
         {/* Mobile Viewport Optimization */}
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
-        
+
         {/* Theme Color for Mobile Browsers */}
         <meta name="theme-color" content="#0f1115" media="(prefers-color-scheme: dark)" />
         <meta name="theme-color" content="#fafaf9" media="(prefers-color-scheme: light)" />
-        
+        <meta name="mobile-web-app-capable" content="yes" />
+
         {/* PWA Manifest */}
         <link rel="manifest" href="/manifest.json" />
-        
+
         {/* Apple Touch Icons */}
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="SOBRA" />
-        
+
         {/* Organization Schema.org JSON-LD */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <WebVitalsReporter />
         <QueryProvider>
           <I18nProvider>
             {children}

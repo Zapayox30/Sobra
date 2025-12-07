@@ -8,21 +8,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { loginSchema, type LoginInput } from '@/lib/validators'
 import { createClient } from '@/lib/supabase/browser'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 import { GoogleAuthButton } from '@/components/auth/google-auth-button'
@@ -65,13 +52,11 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-background">
+    <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 bg-background">
       <Card className="w-full max-w-md border-border/70 shadow-md bg-card/90 backdrop-blur">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-3xl font-bold text-center">
-            SOBRA
-          </CardTitle>
-          <CardDescription className="text-center">
+          <CardTitle className="text-2xl sm:text-3xl font-bold text-center">SOBRA</CardTitle>
+          <CardDescription className="text-center text-sm sm:text-base">
             Inicia sesión en tu cuenta
           </CardDescription>
         </CardHeader>
@@ -88,6 +73,8 @@ export default function LoginPage() {
                       <Input
                         type="email"
                         placeholder="tu@email.com"
+                        autoComplete="email"
+                        inputMode="email"
                         {...field}
                       />
                     </FormControl>
@@ -103,7 +90,12 @@ export default function LoginPage() {
                   <FormItem>
                     <FormLabel>Contraseña</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="••••••" {...field} />
+                      <Input
+                        type="password"
+                        placeholder="••••••••"
+                        autoComplete="current-password"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -122,7 +114,7 @@ export default function LoginPage() {
 
           <div className="mt-4 text-center text-sm text-muted-foreground">
             ¿No tienes cuenta?{' '}
-            <Link href="/register" className="text-primary hover:underline">
+            <Link href="/register" className="text-primary hover:underline font-medium">
               Regístrate
             </Link>
           </div>

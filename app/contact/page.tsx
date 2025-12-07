@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import type { Metadata } from 'next'
-import { Mail, MessageCircle, Phone } from 'lucide-react'
+import { Mail, Phone } from 'lucide-react'
 import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ContactForm } from './contact-form'
@@ -45,7 +45,7 @@ export default function ContactPage() {
           <Card className="border border-white/10 bg-card/90 shadow-xl">
             <CardHeader>
               <CardTitle>Canales directos</CardTitle>
-              <CardDescription>Selecciona el medio que prefieras.</CardDescription>
+              <CardDescription>Te respondemos en menos de 24 horas hábiles.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <ContactTile
@@ -55,16 +55,10 @@ export default function ContactPage() {
                 href="mailto:soporte@sobra.app"
               />
               <ContactTile
-                icon={<MessageCircle className="h-5 w-5" />}
-                title="Chat en vivo"
-                description="Disponible de 9:00 a 18:00 (GMT-5)"
-                href="https://sobra.app/chat"
-              />
-              <ContactTile
                 icon={<Phone className="h-5 w-5" />}
-                title="Línea telefónica"
-                description="+34 600 123 456"
-                href="tel:+34600123456"
+                title="Agendar una llamada"
+                description="Coordina una videollamada con nuestro equipo"
+                href="mailto:soporte@sobra.app?subject=Agendar%20llamada%20SOBRA"
               />
             </CardContent>
           </Card>

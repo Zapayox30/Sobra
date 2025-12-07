@@ -1,6 +1,8 @@
 'use client'
 
+import { useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import { LoadingSpinner } from '@/components/ui/loading-spinner'
 import { useMonthlyCalculation } from '@/hooks/use-calculation'
 import { useProfile } from '@/hooks/use-user'
@@ -12,18 +14,43 @@ import {
   Target,
   Wallet,
   Calendar,
+  TrendingUp,
+  CreditCard,
+  AlertTriangle,
 } from 'lucide-react'
+import Link from 'next/link'
 
 export default function DashboardPage() {
   const { data: profile } = useProfile()
-  const { calculation, isLoading } = useMonthlyCalculation()
+  const {
+    calculation,
+    isLoading,
+    cardDueTotal = 0,
+    cardMinimumDue = 0,
+    nextDueDate,
+    overdue,
+  } = useMonthlyCalculation()
   const { t } = useI18n()
+
+  // Memoize currency to prevent unnecessary re-renders
+  const currency = useMemo(() => (profile as any)?.currency || 'USD', [profile])
+
+  // Memoize card due calculations
+  const cardDueInfo = useMemo(() => {
+    if (!nextDueDate) return { daysToDue: null, dueSoon: false }
+
+    const today = new Date()
+    const daysToDue = Math.ceil(
+      (new Date(nextDueDate).getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+    )
+    const dueSoon = daysToDue >= 0 && daysToDue <= 5
+
+    return { daysToDue, dueSoon }
+  }, [nextDueDate])
 
   if (isLoading) {
     return <LoadingSpinner />
   }
-
-  const currency = (profile as any)?.currency || 'USD'
 
   return (
     <div className="space-y-6 animate-fade-in-up">
@@ -35,6 +62,31 @@ export default function DashboardPage() {
           {t.dashboard.subtitle}
         </p>
       </div>
+
+      {cardDueTotal > 0 && (overdue || cardDueInfo.dueSoon) && (
+        <Card className={`border ${overdue ? 'border-red-400/50 bg-red-500/10' : 'border-amber-400/50 bg-amber-500/10'} shadow-sm`}>
+          <CardContent className="py-3 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-black/10 text-foreground">
+                <AlertTriangle className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="font-semibold text-foreground">
+                  {overdue ? t.dashboard.cardOverdue : t.dashboard.cardDueSoon}
+                </p>
+                {nextDueDate && (
+                  <p className="text-sm text-muted-foreground">
+                    {t.dashboard.cardNextDue}: {new Date(nextDueDate).toLocaleDateString()} ({cardDueInfo.daysToDue} días)
+                  </p>
+                )}
+              </div>
+            </div>
+            <Button asChild variant="outline" size="sm">
+              <Link href="/credit-cards">Ir a tarjetas</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      )}
 
       {calculation && (
         <>
@@ -55,11 +107,10 @@ export default function DashboardPage() {
                     {t.dashboard.afterPersonal}
                   </p>
                   <p
-                    className={`text-5xl font-semibold tracking-tight ${
-                      calculation.leftoverAfterPersonal >= 0
-                        ? 'text-foreground'
-                        : 'text-red-600'
-                    }`}
+                    className={`text-5xl font-semibold tracking-tight ${calculation.leftoverAfterPersonal >= 0
+                      ? 'text-foreground'
+                      : 'text-red-600'
+                      }`}
                   >
                     {formatCurrency(calculation.leftoverAfterPersonal, currency)}
                   </p>
@@ -91,7 +142,7 @@ export default function DashboardPage() {
           </Card>
 
           {/* Summary Cards */}
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
             <Card className="border-border/70 hover:shadow-md transition-shadow">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -125,9 +176,28 @@ export default function DashboardPage() {
                   {formatCurrency(calculation.fixedTotal, currency)}
                 </div>
                 <p className="text-xs text-muted-foreground mt-1.5">
-                  {calculation.incomeTotal > 0 
+                  {calculation.incomeTotal > 0
                     ? `${((calculation.fixedTotal / calculation.incomeTotal) * 100).toFixed(0)}${t.dashboard.percentageOfIncome}`
                     : t.dashboard.noIncome}
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border/70 hover:shadow-md transition-shadow">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  {t.dashboard.cardDue}
+                </CardTitle>
+                <div className="p-1.5 bg-indigo-500/20 text-indigo-300 rounded-md">
+                  <CreditCard className="h-3.5 w-3.5" />
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-semibold text-foreground">
+                  {formatCurrency(cardDueTotal, currency)}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1.5">
+                  {t.dashboard.cardMinimumDue}: {formatCurrency(cardMinimumDue, currency)}
                 </p>
               </CardContent>
             </Card>
@@ -171,6 +241,33 @@ export default function DashboardPage() {
             </Card>
           </div>
 
+          {/* Analytics Call-to-Action */}
+          <Card className="border-border/70 bg-gradient-to-br from-card to-accent/5 hover:shadow-lg transition-all duration-300">
+            <CardContent className="pt-6">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div className="flex items-start gap-4 flex-1">
+                  <div className="p-3 bg-primary/10 text-primary rounded-lg">
+                    <TrendingUp className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-foreground mb-1">
+                      Análisis Visual de Finanzas
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      Explora gráficos interactivos y visualizaciones detalladas de tus ingresos y gastos
+                    </p>
+                  </div>
+                </div>
+                <Link href="/dashboard/analytics">
+                  <Button className="gap-2 whitespace-nowrap">
+                    <TrendingUp className="h-4 w-4" />
+                    Ver Analytics
+                  </Button>
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Breakdown */}
           <Card className="border-border/70">
             <CardHeader className="pb-4">
@@ -188,6 +285,12 @@ export default function DashboardPage() {
                   <span className="text-sm text-muted-foreground">{t.dashboard.fixedExpensesLabel}</span>
                   <span className="font-medium text-foreground">
                     - {formatCurrency(calculation.fixedTotal, currency)}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center py-1.5">
+                  <span className="text-sm text-muted-foreground">{t.dashboard.cardDue}</span>
+                  <span className="font-medium text-foreground">
+                    - {formatCurrency(cardDueTotal, currency)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center py-1.5">
@@ -213,11 +316,10 @@ export default function DashboardPage() {
                     {t.dashboard.leftover}
                   </span>
                   <span
-                    className={`font-bold text-xl ${
-                      calculation.leftoverAfterPersonal >= 0
-                        ? 'text-foreground'
-                        : 'text-red-600'
-                    }`}
+                    className={`font-bold text-xl ${calculation.leftoverAfterPersonal >= 0
+                      ? 'text-foreground'
+                      : 'text-red-600'
+                      }`}
                   >
                     {formatCurrency(calculation.leftoverAfterPersonal, currency)}
                   </span>

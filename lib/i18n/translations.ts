@@ -18,6 +18,7 @@ export interface Translations {
     expenses: string
     commitments: string
     settings: string
+    creditCards: string
     logout: string
   }
   settings: {
@@ -43,6 +44,11 @@ export interface Translations {
     fixedExpenses: string
     commitments: string
     personalBudget: string
+    cardDue: string
+    cardMinimumDue: string
+    cardNextDue: string
+    cardOverdue: string
+    cardDueSoon: string
     calculation: string
     monthlyBreakdown: string
     totalIncomes: string
@@ -158,6 +164,18 @@ export interface Translations {
     superFastDescription: string
     totalControl: string
     totalControlDescription: string
+    privacyTitle: string
+    privacyDescription: string
+    screenshotTitle: string
+    screenshotSubtitle: string
+    testimonialTitle: string
+    testimonialSubtitle: string
+    testimonial1Quote: string
+    testimonial1Name: string
+    testimonial2Quote: string
+    testimonial2Name: string
+    exampleMonthly: string
+    exampleDaily: string
     faq: string
     faqSubtitle: string
     faq1Question: string
@@ -203,6 +221,7 @@ export const translations: Record<Locale, Translations> = {
       incomes: 'Ingresos',
       expenses: 'Gastos',
       commitments: 'Compromisos',
+      creditCards: 'Tarjetas',
       settings: 'Configuración',
       logout: 'Salir',
     },
@@ -229,6 +248,11 @@ export const translations: Record<Locale, Translations> = {
       fixedExpenses: 'Gastos Fijos',
       commitments: 'Compromisos',
       personalBudget: 'Presupuesto Personal',
+      cardDue: 'Pago tarjeta (mes)',
+      cardMinimumDue: 'Pago mínimo',
+      cardNextDue: 'Próximo vencimiento',
+      cardOverdue: 'Tienes pagos de tarjeta vencidos',
+      cardDueSoon: 'Pago de tarjeta vence pronto',
       calculation: 'Cálculo',
       monthlyBreakdown: 'Desglose Mensual',
       totalIncomes: 'Ingresos totales',
@@ -249,11 +273,12 @@ export const translations: Record<Locale, Translations> = {
       newIncome: 'Nuevo Ingreso',
       totalActive: 'Ingresos Mensuales Totales',
       balance: 'Balance Después de Gastos',
-      negativeBalance: '⚠️ Gastas más de lo que ganas',
-      positiveBalance: '✅ Tu presupuesto está equilibrado',
+      negativeBalance: '¡Estás gastando más de lo que ganas!',
+      positiveBalance: '¡Bien! Tu presupuesto está equilibrado',
       activeSources: 'fuente(s) activa(s)',
       negativeAlertTitle: '¡Atención! Presupuesto en Negativo',
-      negativeAlertMessage: 'Tus gastos totales ({totalExpenses}) superan tus ingresos ({totalIncome}). Déficit: {deficit}. Considera reducir gastos o buscar ingresos adicionales.',
+      negativeAlertMessage:
+        'Tus gastos totales ({totalExpenses}) superan tus ingresos ({totalIncome}). Déficit: {deficit}. Considera reducir gastos o buscar ingresos adicionales.',
       totalExpenses: 'Total de gastos',
       deficit: 'Déficit',
       suggestion: 'Considera reducir gastos o buscar ingresos adicionales para equilibrar tu presupuesto.',
@@ -288,7 +313,7 @@ export const translations: Record<Locale, Translations> = {
       subtitle: 'Gestiona tu información personal y preferencias',
       personalInfo: 'Información Personal',
       currency: 'Moneda',
-      period: 'Período',
+      period: 'Periodo',
       monthly: 'Mensual',
       biweekly: 'Quincenal',
       currentPlan: 'Plan Actual',
@@ -319,13 +344,15 @@ export const translations: Record<Locale, Translations> = {
     },
     landing: {
       heroTitle: 'Descubre cuánto te sobra después de tus gastos mensuales',
-      heroSubtitle: 'Calcula tu dinero disponible con nuestra calculadora de finanzas personales. Toma control de tu presupuesto en minutos.',
-      heroDescription: 'Gestiona tus ingresos, gastos fijos y compromisos financieros. Descubre cuánto puedes gastar diariamente sin preocupaciones.',
+      heroSubtitle:
+        'Calcula tu dinero disponible con nuestra calculadora de finanzas personales. Toma control de tu presupuesto en minutos.',
+      heroDescription:
+        'Gestiona tus ingresos, gastos fijos y compromisos financieros. Descubre cuánto puedes gastar diariamente sin preocupaciones.',
       ctaStart: 'Comenzar Gratis 🚀',
       ctaLogin: 'Iniciar Sesión',
       free: 'Gratis para siempre',
       noCreditCard: 'Sin tarjeta de crédito',
-      quickSetup: 'Setup en 2 minutos',
+      quickSetup: 'Listo en 2 minutos',
       whyChoose: '¿Por qué elegir SOBRA?',
       whyChooseSubtitle: 'La herramienta más simple para gestionar tus finanzas personales',
       howItWorks: '¿Cómo funciona?',
@@ -337,32 +364,51 @@ export const translations: Record<Locale, Translations> = {
       step3Title: 'Define compromisos',
       step3Description: 'Establece metas de ahorro o pagos programados con fechas específicas. Planifica tus compromisos financieros.',
       step4Title: 'Ve cuánto te SOBRA',
-      step4Description: 'Descubre tu dinero disponible mensual y recibe una sugerencia de gasto diario para mantenerte dentro del presupuesto.',
+      step4Description:
+        'Descubre tu dinero disponible mensual y recibe una sugerencia de gasto diario para mantenerte dentro del presupuesto.',
       free100: '100% Gratis',
       free100Description: 'Sin costos ocultos, sin tarjeta de crédito requerida. Gestiona tus finanzas sin límites de tiempo.',
       superFast: 'Súper Rápido',
-      superFastDescription: 'Configura tu cuenta en menos de 2 minutos. Interfaz intuitiva para calcular tu presupuesto al instante.',
+      superFastDescription:
+        'Configura tu cuenta en menos de 2 minutos. Interfaz intuitiva para calcular tu presupuesto al instante.',
       totalControl: 'Control Total',
       totalControlDescription: 'Visualiza todos tus ingresos, gastos y compromisos en un solo lugar. Toma decisiones informadas.',
+      privacyTitle: 'Privacidad y seguridad',
+      privacyDescription: 'Tus datos están protegidos en Supabase con RLS. Solo tú puedes ver y gestionar tu información financiera.',
+      screenshotTitle: 'Así se ve tu dashboard',
+      screenshotSubtitle: 'Un vistazo rápido al cálculo de tu sobrante y sugerencia diaria.',
+      testimonialTitle: 'Personas que ya usan SOBRA',
+      testimonialSubtitle: 'Historias breves de usuarios reales.',
+      testimonial1Quote: '“En 5 minutos vi cuánto podía gastar cada día sin salirme del presupuesto.”',
+      testimonial1Name: 'Ana · Freelance',
+      testimonial2Quote: '“Me ayudó a ordenar tarjetas y renta; dejé de vivir al límite cada quincena.”',
+      testimonial2Name: 'Luis · Ingeniero',
+      exampleMonthly: 'Ejemplo de cálculo del mes',
+      exampleDaily: 'Ejemplo de sugerencia diaria',
       faq: 'Preguntas Frecuentes',
       faqSubtitle: 'Todo lo que necesitas saber sobre SOBRA',
       faq1Question: '¿Es realmente gratis?',
-      faq1Answer: 'Sí, SOBRA es 100% gratuito y siempre lo será. No requerimos tarjeta de crédito ni tienes límites de tiempo para usar la aplicación.',
+      faq1Answer:
+        'Sí, SOBRA es 100% gratuito y siempre lo será. No requerimos tarjeta de crédito ni tienes límites de tiempo para usar la aplicación.',
       faq2Question: '¿Cómo calcula cuánto me sobra?',
-      faq2Answer: 'SOBRA toma tus ingresos totales, resta tus gastos fijos, gastos personales y compromisos mensuales. El resultado es tu dinero disponible, que dividimos entre los días del mes para darte una sugerencia de gasto diario.',
+      faq2Answer:
+        'SOBRA toma tus ingresos totales, resta tus gastos fijos, gastos personales y compromisos mensuales. El resultado es tu dinero disponible, que dividimos entre los días del mes para darte una sugerencia de gasto diario.',
       faq3Question: '¿Mis datos están seguros?',
-      faq3Answer: 'Absolutamente. Usamos Supabase con encriptación de extremo a extremo. Tus datos financieros son privados y solo tú puedes acceder a ellos. No compartimos tu información con terceros.',
+      faq3Answer:
+        'Absolutamente. Usamos Supabase con encriptación de extremo a extremo. Tus datos financieros son privados y solo tú puedes acceder a ellos. No compartimos tu información con terceros.',
       faq4Question: '¿Puedo usar SOBRA desde mi móvil?',
-      faq4Answer: 'Sí, SOBRA es una aplicación web responsive que funciona perfectamente en móviles, tablets y ordenadores. Accede desde cualquier dispositivo con conexión a internet.',
+      faq4Answer:
+        'Sí, SOBRA es una aplicación web responsive que funciona perfectamente en móviles, tablets y ordenadores. Accede desde cualquier dispositivo con conexión a internet.',
       ctaTitle: 'Comienza a gestionar tus finanzas hoy',
-      ctaDescription: 'Es gratis, simple y te tomará menos de 2 minutos configurar tu cuenta. Sin trucos, sin tarjeta de crédito requerida. Toma control de tu dinero ahora mismo.',
-      ctaButton: '🎯 Crear Cuenta Gratis',
+      ctaDescription:
+        'Es gratis, simple y te tomará menos de 2 minutos configurar tu cuenta. Sin trucos, sin tarjeta de crédito requerida. Toma control de tu dinero ahora mismo.',
+      ctaButton: 'Crear cuenta gratis 🚀',
     },
     onboarding: {
       welcome: '¡Bienvenido a SOBRA!',
       setupProfile: 'Configura tu perfil para comenzar',
       currency: 'Moneda',
-      period: 'Período',
+      period: 'Periodo',
       initialIncome: 'Ingreso inicial (opcional)',
       initialIncomeLabel: 'Etiqueta del ingreso',
       optional: '(opcional)',
@@ -387,6 +433,7 @@ export const translations: Record<Locale, Translations> = {
       incomes: 'Incomes',
       expenses: 'Expenses',
       commitments: 'Commitments',
+      creditCards: 'Cards',
       settings: 'Settings',
       logout: 'Logout',
     },
@@ -398,7 +445,7 @@ export const translations: Record<Locale, Translations> = {
       languageDescription: 'Select the application language',
       preferences: 'Preferences',
       landingTitle: 'View marketing site',
-      landingDescription: 'Open SOBRA’s public landing page to share or revisit it.',
+      landingDescription: "Open SOBRA's public landing page to share or revisit it.",
       landingButton: 'Go to sobra.app',
     },
     dashboard: {
@@ -413,6 +460,11 @@ export const translations: Record<Locale, Translations> = {
       fixedExpenses: 'Fixed Expenses',
       commitments: 'Commitments',
       personalBudget: 'Personal Budget',
+      cardDue: 'Card due (this month)',
+      cardMinimumDue: 'Minimum due',
+      cardNextDue: 'Next due date',
+      cardOverdue: 'You have overdue card payments',
+      cardDueSoon: 'Card payment due soon',
       calculation: 'Calculation',
       monthlyBreakdown: 'Monthly Breakdown',
       totalIncomes: 'Total incomes',
@@ -437,7 +489,8 @@ export const translations: Record<Locale, Translations> = {
       positiveBalance: '✅ Your budget is balanced',
       activeSources: 'active source(s)',
       negativeAlertTitle: '⚠️ Attention! Negative Budget',
-      negativeAlertMessage: 'Your total expenses ({totalExpenses}) exceed your income ({totalIncome}). Deficit: {deficit}. Consider reducing expenses or finding additional income.',
+      negativeAlertMessage:
+        'Your total expenses ({totalExpenses}) exceed your income ({totalIncome}). Deficit: {deficit}. Consider reducing expenses or finding additional income.',
       totalExpenses: 'Total expenses',
       deficit: 'Deficit',
       suggestion: 'Consider reducing expenses or finding additional income to balance your budget.',
@@ -503,8 +556,10 @@ export const translations: Record<Locale, Translations> = {
     },
     landing: {
       heroTitle: 'Discover how much you have left after your monthly expenses',
-      heroSubtitle: 'Calculate your available money with our personal finance calculator. Take control of your budget in minutes.',
-      heroDescription: 'Manage your income, fixed expenses, and financial commitments. Discover how much you can spend daily without worries.',
+      heroSubtitle:
+        'Calculate your available money with our personal finance calculator. Take control of your budget in minutes.',
+      heroDescription:
+        'Manage your income, fixed expenses, and financial commitments. Discover how much you can spend daily without worries.',
       ctaStart: 'Start Free 🚀',
       ctaLogin: 'Login',
       free: 'Free forever',
@@ -521,26 +576,45 @@ export const translations: Record<Locale, Translations> = {
       step3Title: 'Define commitments',
       step3Description: 'Set savings goals or scheduled payments with specific dates. Plan your financial commitments.',
       step4Title: 'See how much you have LEFT',
-      step4Description: 'Discover your available monthly money and receive a daily spending suggestion to stay within budget.',
+      step4Description:
+        'Discover your available monthly money and receive a daily spending suggestion to stay within budget.',
       free100: '100% Free',
       free100Description: 'No hidden costs, no credit card required. Manage your finances without time limits.',
       superFast: 'Super Fast',
-      superFastDescription: 'Set up your account in less than 2 minutes. Intuitive interface to calculate your budget instantly.',
+      superFastDescription:
+        'Set up your account in less than 2 minutes. Intuitive interface to calculate your budget instantly.',
       totalControl: 'Total Control',
       totalControlDescription: 'View all your income, expenses, and commitments in one place. Make informed decisions.',
+      privacyTitle: 'Privacy and security',
+      privacyDescription: 'Your data is protected in Supabase with RLS. Only you can view and manage your financial info.',
+      screenshotTitle: 'This is your dashboard',
+      screenshotSubtitle: 'A quick look at your leftover and daily suggestion.',
+      testimonialTitle: 'People using SOBRA',
+      testimonialSubtitle: 'Short stories from real users.',
+      testimonial1Quote: '"In 5 minutes I saw how much I could spend each day without breaking my budget."',
+      testimonial1Name: 'Ana · Freelancer',
+      testimonial2Quote: '"Helped me organize cards and rent; I stopped living paycheck to paycheck."',
+      testimonial2Name: 'Luis · Engineer',
+      exampleMonthly: 'Monthly example',
+      exampleDaily: 'Daily suggestion example',
       faq: 'Frequently Asked Questions',
       faqSubtitle: 'Everything you need to know about SOBRA',
       faq1Question: 'Is it really free?',
-      faq1Answer: 'Yes, SOBRA is 100% free and always will be. We do not require a credit card and you have no time limits to use the application.',
+      faq1Answer:
+        'Yes, SOBRA is 100% free and always will be. We do not require a credit card and you have no time limits to use the application.',
       faq2Question: 'How does it calculate how much I have left?',
-      faq2Answer: 'SOBRA takes your total income, subtracts your fixed expenses, personal expenses, and monthly commitments. The result is your available money, which we divide by the days of the month to give you a daily spending suggestion.',
+      faq2Answer:
+        'SOBRA takes your total income, subtracts your fixed expenses, personal expenses, and monthly commitments. The result is your available money, which we divide by the days of the month to give you a daily spending suggestion.',
       faq3Question: 'Is my data secure?',
-      faq3Answer: 'Absolutely. We use Supabase with end-to-end encryption. Your financial data is private and only you can access it. We do not share your information with third parties.',
+      faq3Answer:
+        'Absolutely. We use Supabase with end-to-end encryption. Your financial data is private and only you can access it. We do not share your information with third parties.',
       faq4Question: 'Can I use SOBRA from my phone?',
-      faq4Answer: 'Yes, SOBRA is a responsive web application that works perfectly on mobile phones, tablets, and computers. Access from any device with an internet connection.',
+      faq4Answer:
+        'Yes, SOBRA is a responsive web application that works perfectly on mobile phones, tablets, and computers. Access from any device with an internet connection.',
       ctaTitle: 'Start managing your finances today',
-      ctaDescription: "It's free, simple, and will take you less than 2 minutes to set up your account. No tricks, no credit card required. Take control of your money right now.",
-      ctaButton: '🎯 Create Free Account',
+      ctaDescription:
+        "It's free, simple, and will take you less than 2 minutes to set up your account. No tricks, no credit card required. Take control of your money right now.",
+      ctaButton: 'Create Free Account 🚀',
     },
     onboarding: {
       welcome: 'Welcome to SOBRA!',
@@ -555,4 +629,3 @@ export const translations: Record<Locale, Translations> = {
     },
   },
 }
-

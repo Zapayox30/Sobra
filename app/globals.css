@@ -46,21 +46,28 @@
 
 :root {
   --radius: 0.5rem;
-  
+
   /* SOBRA Brand Colors - Estilo Notion/ChatGPT */
-  --brand-black: oklch(0.15 0 0); /* Negro principal */
-  --brand-gray: oklch(0.25 0 0); /* Gris oscuro */
-  --brand-gray-light: oklch(0.45 0 0); /* Gris medio */
-  --brand-accent: oklch(0.72 0.19 280); /* Morado/Azul acento */
+  --brand-black: oklch(0.15 0 0);
+  /* Negro principal */
+  --brand-gray: oklch(0.25 0 0);
+  /* Gris oscuro */
+  --brand-gray-light: oklch(0.45 0 0);
+  /* Gris medio */
+  --brand-accent: oklch(0.72 0.19 280);
+  /* Morado/Azul acento */
   --brand-gradient-start: oklch(0.78 0.2 278);
   --brand-gradient-end: oklch(0.66 0.18 320);
   --brand-success: oklch(0.62 0.20 142);
   --brand-danger: oklch(0.58 0.24 27);
-  
+
   /* Fondos estilo Notion/ChatGPT - Grises cálidos y suaves */
-  --background: oklch(0.985 0.002 90); /* Fondo principal cálido estilo Notion (#FAFAF9) */
-  --foreground: oklch(0.20 0 0); /* Texto oscuro */
-  --card: oklch(1 0 0); /* Cards blancos */
+  --background: oklch(0.985 0.002 90);
+  /* Fondo principal cálido estilo Notion (#FAFAF9) */
+  --foreground: oklch(0.20 0 0);
+  /* Texto oscuro */
+  --card: oklch(1 0 0);
+  /* Cards blancos */
   --card-foreground: oklch(0.20 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.20 0 0);
@@ -77,11 +84,16 @@
   --border: oklch(0.88 0.003 90);
   --input: oklch(1 0 0);
   --ring: oklch(0.40 0.005 90);
-  --chart-1: oklch(0.30 0 0);
-  --chart-2: oklch(0.50 0 0);
-  --chart-3: oklch(0.65 0.15 280);
-  --chart-4: oklch(0.70 0.15 320);
-  --chart-5: oklch(0.60 0.20 60);
+  --chart-1: 270 80% 60%;
+  /* Vibrant Purple */
+  --chart-2: 210 85% 60%;
+  /* Bright Blue */
+  --chart-3: 150 70% 55%;
+  /* Emerald Green */
+  --chart-4: 330 85% 65%;
+  /* Pink/Magenta */
+  --chart-5: 30 90% 60%;
+  /* Bright Orange */
   /* Sidebar estilo Notion - Blanco limpio */
   --sidebar: oklch(1 0 0);
   --sidebar-foreground: oklch(0.40 0 0);
@@ -114,11 +126,16 @@
   --border: oklch(0.38 0.01 255);
   --input: oklch(0.28 0.009 255);
   --ring: oklch(0.68 0.12 278);
-  --chart-1: oklch(0.48 0.21 265);
-  --chart-2: oklch(0.58 0.18 210);
-  --chart-3: oklch(0.65 0.2 70);
-  --chart-4: oklch(0.62 0.15 320);
-  --chart-5: oklch(0.63 0.24 25);
+  --chart-1: 270 90% 70%;
+  /* Bright Neon Purple */
+  --chart-2: 195 95% 65%;
+  /* Cyan Blue */
+  --chart-3: 145 80% 65%;
+  /* Lime Green */
+  --chart-4: 330 90% 70%;
+  /* Hot Pink */
+  --chart-5: 25 95% 65%;
+  /* Bright Orange */
   --sidebar: oklch(0.19 0.008 255);
   --sidebar-foreground: oklch(0.95 0.005 255);
   --sidebar-primary: oklch(0.28 0.012 255);
@@ -133,104 +150,133 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground antialiased;
   }
 }
 
 @layer utilities {
+
   /* Animaciones personalizadas */
   @keyframes fade-in-up {
     from {
       opacity: 0;
       transform: translateY(10px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
     }
   }
-  
+
   @keyframes pulse-green {
-    0%, 100% {
+
+    0%,
+    100% {
       opacity: 1;
     }
+
     50% {
       opacity: 0.8;
     }
   }
-  
+
   @keyframes shimmer {
     0% {
       background-position: -200% 0;
     }
+
     100% {
       background-position: 200% 0;
     }
   }
-  
+
   .animate-fade-in-up {
     animation: fade-in-up 0.5s ease-out;
   }
-  
+
   .animate-pulse-green {
     animation: pulse-green 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
-  
+
   .shimmer {
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.2),
-      transparent
-    );
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent);
     background-size: 200% 100%;
     animation: shimmer 2s infinite;
   }
-  
+
   /* Gradientes de marca */
-.gradient-brand {
-  background: linear-gradient(135deg, var(--brand-gradient-start) 0%, var(--brand-gradient-end) 100%);
-  color: var(--primary-foreground);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
-}
-  
-.gradient-accent {
-  background: linear-gradient(135deg, var(--brand-gray) 0%, var(--brand-accent) 100%);
-}
-  
+  .gradient-brand {
+    background: linear-gradient(135deg, var(--brand-gradient-start) 0%, var(--brand-gradient-end) 100%);
+    color: var(--primary-foreground);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+  }
+
+  .gradient-accent {
+    background: linear-gradient(135deg, var(--brand-gray) 0%, var(--brand-accent) 100%);
+  }
+
   .text-gradient {
     background: linear-gradient(135deg, var(--brand-black) 0%, var(--brand-accent) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
-  
+
   /* Efectos de hover suaves */
   .hover-lift {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
-  
+
   .hover-lift:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
-  
+
   /* Card con brillo sutil */
   .card-glow {
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08),
-                0 2px 4px rgba(0, 0, 0, 0.06),
-                0 0 20px rgba(0, 0, 0, 0.04);
+      0 2px 4px rgba(0, 0, 0, 0.06),
+      0 0 20px rgba(0, 0, 0, 0.04);
   }
-  
+
   .card-glow:hover {
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12),
-                0 4px 12px rgba(0, 0, 0, 0.12),
-                0 0 30px rgba(0, 0, 0, 0.08);
+      0 4px 12px rgba(0, 0, 0, 0.12),
+      0 0 30px rgba(0, 0, 0, 0.08);
   }
-  
+
   /* ===== MOBILE OPTIMIZATION UTILITIES ===== */
-  
+
+  /* Safe Area Support for devices with notch/dynamic island */
+  .safe-area-inset-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-area-inset-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .safe-area-inset-left {
+    padding-left: env(safe-area-inset-left);
+  }
+
+  .safe-area-inset-right {
+    padding-right: env(safe-area-inset-right);
+  }
+
+  .safe-area-inset-all {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
   /* Touch Target - Minimum 44x44px for accessibility */
   .touch-target {
     min-width: 44px;
@@ -239,82 +285,256 @@
     align-items: center;
     justify-content: center;
   }
-  
+
+  /* Larger touch target for primary actions */
+  .touch-target-lg {
+    min-width: 48px;
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   /* Optimized for touch devices - prevents 300ms delay */
   .touch-optimized {
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
   }
-  
-  /* Mobile-specific padding */
+
+  /* Smooth scrolling for better UX */
+  .smooth-scroll {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Scroll snap for carousel-like experiences */
+  .scroll-snap-x {
+    scroll-snap-type: x mandatory;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .scroll-snap-y {
+    scroll-snap-type: y mandatory;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .scroll-snap-item {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hidden {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Mobile-specific padding with safe areas */
   .mobile-padding {
-    padding: 1rem;
+    padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
   }
-  
+
+  .mobile-padding-x {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+
+  .mobile-padding-y {
+    padding-top: max(1rem, env(safe-area-inset-top));
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
   /* Mobile-optimized text sizes */
   .mobile-text-sm {
     font-size: 0.875rem;
     line-height: 1.5;
   }
-  
+
   .mobile-text-base {
     font-size: 1rem;
     line-height: 1.5;
   }
-  
+
+  .mobile-text-lg {
+    font-size: 1.125rem;
+    line-height: 1.5;
+  }
+
+  /* Prevent text size adjustment on orientation change */
+  .text-size-adjust-none {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  /* Active/pressed states for touch feedback */
+  .touch-active:active {
+    transform: scale(0.97);
+    opacity: 0.9;
+    transition: transform 0.1s ease, opacity 0.1s ease;
+  }
+
+  /* Ripple effect preparation for future */
+  .ripple-effect {
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Gesture preparation - swipeable containers */
+  .swipeable {
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
+  }
+
   /* Improved hover for touch devices - only apply on non-touch */
   @media (hover: hover) and (pointer: fine) {
     .hover-lift:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
-    
+
     .card-glow:hover {
       box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12),
-                  0 4px 12px rgba(0, 0, 0, 0.12),
-                  0 0 30px rgba(0, 0, 0, 0.08);
+        0 4px 12px rgba(0, 0, 0, 0.12),
+        0 0 30px rgba(0, 0, 0, 0.08);
     }
   }
-  
+
+  /* Reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Mobile-first breakpoint approach */
+  /* Extra small devices (phones, less than 576px) - default */
+
+  /* Small devices (landscape phones, 576px and up) */
+  @media (min-width: 576px) {
+    .mobile-padding {
+      padding: 1.25rem;
+    }
+  }
+
+  /* Medium devices (tablets, 768px and up) */
+  @media (min-width: 768px) {
+    .mobile-padding {
+      padding: 1.5rem;
+    }
+  }
+
   /* Mobile-specific adjustments for small screens */
   @media (max-width: 640px) {
+
     /* Slightly larger base font for readability */
     body {
-      font-size: 16px; /* Prevents iOS zoom on focus */
+      font-size: 16px;
+      /* Prevents iOS zoom on focus */
     }
-    
+
     /* Reduce large titles on mobile */
     h1 {
       font-size: 2rem;
       line-height: 1.2;
     }
-    
+
     h2 {
       font-size: 1.5rem;
       line-height: 1.3;
     }
-    
+
+    h3 {
+      font-size: 1.25rem;
+      line-height: 1.4;
+    }
+
     /* Optimize padding for mobile */
     .container {
       padding-left: 1rem;
       padding-right: 1rem;
     }
-    
+
     /* Make buttons more prominent on mobile */
-    button, .button, [role="button"] {
+    button,
+    .button,
+    [role="button"] {
       min-height: 44px;
       padding: 0.75rem 1.25rem;
+      font-size: 1rem;
+      /* Prevent iOS zoom */
+    }
+
+    /* Optimize input fields for mobile */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    input[type="tel"],
+    textarea,
+    select {
+      font-size: 16px;
+      /* Prevent iOS zoom on focus */
+    }
+
+    /* Increase spacing for better touch targets */
+    .space-y-4>*+* {
+      margin-top: 1.25rem;
     }
   }
-  
+
   /* Extra small devices optimization */
   @media (max-width: 375px) {
     h1 {
       font-size: 1.75rem;
     }
-    
+
     h2 {
       font-size: 1.35rem;
+    }
+
+    h3 {
+      font-size: 1.15rem;
+    }
+
+    /* Reduce padding on very small screens */
+    .container {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
+  }
+
+  /* Landscape phone optimization */
+  @media (max-height: 500px) and (orientation: landscape) {
+
+    /* Reduce vertical spacing in landscape */
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Compact padding in landscape */
+    .mobile-padding {
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
     }
   }
 }

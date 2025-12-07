@@ -14,6 +14,7 @@ import {
   LayoutDashboard,
   PlusCircle,
   LogOut,
+  CreditCard,
   PanelLeftOpen,
   PanelLeftClose,
   ChevronDown,
@@ -21,6 +22,7 @@ import {
   Globe,
   LifeBuoy,
   Info,
+  TrendingUp,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/brand/logo'
@@ -36,9 +38,11 @@ export function Sidebar() {
 
   const navigation = [
     { name: t.nav.dashboard, href: '/dashboard', icon: LayoutDashboard },
+    { name: 'Trends', href: '/trends', icon: TrendingUp },
     { name: t.nav.incomes, href: '/incomes', icon: DollarSign },
     { name: t.nav.expenses, href: '/expenses', icon: TrendingDown },
     { name: t.nav.commitments, href: '/commitments', icon: Target },
+    { name: t.nav.creditCards, href: '/credit-cards', icon: CreditCard },
   ]
 
   const isActive = (href: string) => pathname === href

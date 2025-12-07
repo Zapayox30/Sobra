@@ -32,6 +32,15 @@ Este documento describe todas las rutas y secciones de la aplicación SOBRA.
   - Formulario de registro (nombre, email, password, confirm password)
   - Link a login
 
+#### `/pricing` - Planes y precios
+- **Nombre:** Precios
+- **Descripción:** Página con planes Gratis y Plus, roadmap y FAQ
+- **Componentes:**
+  - Hero de precios
+  - Cards de planes
+  - Beneficios incluidos y roadmap
+  - Preguntas frecuentes
+
 #### `/onboarding` - Onboarding
 - **Nombre:** Onboarding
 - **Descripción:** Configuración inicial después del registro

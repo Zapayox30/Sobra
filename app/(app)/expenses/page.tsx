@@ -130,12 +130,14 @@ export default function ExpensesPage() {
                         variant="outline"
                         size="sm"
                         onClick={() => handleEdit(expense, 'fixed')}
+                        disabled={deleteFixed.isPending}
                       >
                         <Edit className="h-3 w-3" />
                       </Button>
                       <Button
                         variant="outline"
                         size="sm"
+                        disabled={deleteFixed.isPending}
                         onClick={() => {
                           if (
                             confirm('¿Estás seguro de eliminar este gasto?')
@@ -202,12 +204,14 @@ export default function ExpensesPage() {
                         variant="outline"
                         size="sm"
                         onClick={() => handleEdit(expense, 'personal')}
+                        disabled={deletePersonal.isPending}
                       >
                         <Edit className="h-3 w-3" />
                       </Button>
                       <Button
                         variant="outline"
                         size="sm"
+                        disabled={deletePersonal.isPending}
                         onClick={() => {
                           if (
                             confirm(
@@ -252,4 +256,3 @@ export default function ExpensesPage() {
     </div>
   )
 }
-

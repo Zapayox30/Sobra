@@ -33,12 +33,12 @@ export default function IncomesPage() {
   const [editingIncome, setEditingIncome] = useState<Income | undefined>()
 
   const currency = (profile as any)?.currency || 'USD'
-  
+
   // Calcular total de ingresos activos
   const totalIncomeActive = incomes
     ?.filter(i => i.is_active)
     .reduce((sum, income) => sum + Number(income.amount), 0) || 0
-  
+
   // Verificar si está en negativo
   const isNegativeBalance = calculation && calculation.leftoverAfterPersonal < 0
 
@@ -101,18 +101,16 @@ export default function IncomesPage() {
 
           {/* Card: Balance Final / Alerta */}
           {calculation && (
-            <Card className={`border-border/70 hover:shadow-md transition-shadow ${
-              isNegativeBalance 
-                ? 'border-destructive/60' 
+            <Card className={`border-border/70 hover:shadow-md transition-shadow ${isNegativeBalance
+                ? 'border-destructive/60'
                 : 'border-border/70'
-            }`}>
+              }`}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
                   {t.incomes.balance}
                 </CardTitle>
-                <div className={`p-1.5 rounded-md ${
-                  isNegativeBalance ? 'bg-destructive/25 text-destructive-foreground' : 'bg-emerald-500/20 text-emerald-300'
-                }`}>
+                <div className={`p-1.5 rounded-md ${isNegativeBalance ? 'bg-destructive/25 text-destructive-foreground' : 'bg-emerald-500/20 text-emerald-300'
+                  }`}>
                   {isNegativeBalance ? (
                     <AlertTriangle className="h-3.5 w-3.5" />
                   ) : (
@@ -121,15 +119,13 @@ export default function IncomesPage() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className={`text-3xl font-semibold ${
-                  isNegativeBalance ? 'text-red-600' : 'text-foreground'
-                }`}>
+                <div className={`text-3xl font-semibold ${isNegativeBalance ? 'text-red-600' : 'text-foreground'
+                  }`}>
                   {formatCurrency(calculation.leftoverAfterPersonal, currency)}
                 </div>
-                <p className={`text-xs mt-2 ${
-                  isNegativeBalance ? 'text-red-600' : 'text-muted-foreground'
-                }`}>
-                  {isNegativeBalance 
+                <p className={`text-xs mt-2 ${isNegativeBalance ? 'text-red-600' : 'text-muted-foreground'
+                  }`}>
+                  {isNegativeBalance
                     ? t.incomes.negativeBalance
                     : t.incomes.positiveBalance}
                 </p>
@@ -197,12 +193,14 @@ export default function IncomesPage() {
                     variant="outline"
                     size="sm"
                     onClick={() => handleEdit(income)}
+                    disabled={deleteIncome.isPending}
                   >
                     <Edit className="h-3 w-3" />
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
+                    disabled={deleteIncome.isPending}
                     onClick={() => {
                       if (
                         confirm('¿Estás seguro de eliminar este ingreso?')

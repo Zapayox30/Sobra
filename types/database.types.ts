@@ -287,6 +287,161 @@ export interface Database {
           generated_at?: string
         }
       }
+      credit_cards: {
+        Row: {
+          id: string
+          user_id: string
+          name: string
+          issuer: string | null
+          credit_limit: number | null
+          cutoff_day: number
+          due_day: number
+          is_active: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          name: string
+          issuer?: string | null
+          credit_limit?: number | null
+          cutoff_day: number
+          due_day: number
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          name?: string
+          issuer?: string | null
+          credit_limit?: number | null
+          cutoff_day?: number
+          due_day?: number
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      card_statements: {
+        Row: {
+          id: string
+          user_id: string
+          card_id: string
+          statement_month: string
+          closing_date: string
+          due_date: string
+          total_due: number
+          minimum_due: number
+          status: 'open' | 'partial' | 'paid'
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          card_id: string
+          statement_month: string
+          closing_date: string
+          due_date: string
+          total_due: number
+          minimum_due?: number
+          status?: 'open' | 'partial' | 'paid'
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          card_id?: string
+          statement_month?: string
+          closing_date?: string
+          due_date?: string
+          total_due?: number
+          minimum_due?: number
+          status?: 'open' | 'partial' | 'paid'
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      card_payments: {
+        Row: {
+          id: string
+          user_id: string
+          card_id: string
+          statement_id: string | null
+          amount: number
+          paid_at: string
+          method: string | null
+          note: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          card_id: string
+          statement_id?: string | null
+          amount: number
+          paid_at?: string
+          method?: string | null
+          note?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          card_id?: string
+          statement_id?: string | null
+          amount?: number
+          paid_at?: string
+          method?: string | null
+          note?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      card_transactions: {
+        Row: {
+          id: string
+          user_id: string
+          card_id: string
+          amount: number
+          description: string | null
+          category: string | null
+          purchased_at: string
+          installments_total: number | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          card_id: string
+          amount: number
+          description?: string | null
+          category?: string | null
+          purchased_at?: string
+          installments_total?: number | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          card_id?: string
+          amount?: number
+          description?: string | null
+          category?: string | null
+          purchased_at?: string
+          installments_total?: number | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
     }
     Views: {
       [_ in never]: never

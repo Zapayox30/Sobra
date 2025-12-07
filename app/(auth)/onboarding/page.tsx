@@ -7,13 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { onboardingSchema, type OnboardingInput } from '@/lib/validators'
 import { createClient } from '@/lib/supabase/browser'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Form,
   FormControl,
@@ -24,20 +18,14 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { toast } from 'sonner'
 
 export default function OnboardingPage() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
 
-  const form = useForm<any>({
+  const form = useForm<OnboardingInput>({
     resolver: zodResolver(onboardingSchema),
     defaultValues: {
       full_name: '',
@@ -57,7 +45,6 @@ export default function OnboardingPage() {
       } = await supabase.auth.getUser()
       if (!user) throw new Error('No user found')
 
-      // Update profile
       const { error: profileError } = await (supabase as any)
         .from('profiles')
         .update({
@@ -69,7 +56,6 @@ export default function OnboardingPage() {
 
       if (profileError) throw profileError
 
-      // Create initial income if provided
       if (data.initial_income && data.initial_income > 0) {
         const { error: incomeError } = await (supabase as any).from('incomes').insert({
           user_id: user.id,
@@ -99,12 +85,8 @@ export default function OnboardingPage() {
     <div className="min-h-screen flex items-center justify-center p-4 bg-background">
       <Card className="w-full max-w-2xl border-border/70 shadow-md bg-card/90 backdrop-blur">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-3xl font-bold text-center">
-            ¡Bienvenido a SOBRA!
-          </CardTitle>
-          <CardDescription className="text-center">
-            Configura tu perfil para comenzar
-          </CardDescription>
+          <CardTitle className="text-3xl font-bold text-center">¡Bienvenido a SOBRA!</CardTitle>
+          <CardDescription className="text-center">Configura tu perfil para comenzar</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -130,21 +112,18 @@ export default function OnboardingPage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Moneda</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Selecciona moneda" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="USD">🇺🇸 USD ($) - Dólar Estadounidense</SelectItem>
-                          <SelectItem value="EUR">🇪🇺 EUR (€) - Euro</SelectItem>
-                          <SelectItem value="MXN">🇲🇽 MXN ($) - Peso Mexicano</SelectItem>
-                          <SelectItem value="ARS">🇦🇷 ARS ($) - Peso Argentino</SelectItem>
-                          <SelectItem value="PEN">🇵🇪 PEN (S/) - Sol Peruano</SelectItem>
+                          <SelectItem value="USD">USD ($) - Dólar estadounidense</SelectItem>
+                          <SelectItem value="EUR">EUR (€) - Euro</SelectItem>
+                          <SelectItem value="MXN">MXN ($) - Peso mexicano</SelectItem>
+                          <SelectItem value="ARS">ARS ($) - Peso argentino</SelectItem>
+                          <SelectItem value="PEN">PEN (S/) - Sol peruano</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -157,14 +136,11 @@ export default function OnboardingPage() {
                   name="period"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Período</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
+                      <FormLabel>Periodo</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Selecciona período" />
+                            <SelectValue placeholder="Selecciona periodo" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -179,9 +155,7 @@ export default function OnboardingPage() {
               </div>
 
               <div className="border-t pt-6">
-                <h3 className="text-lg font-semibold mb-4">
-                  Ingreso inicial (opcional)
-                </h3>
+                <h3 className="text-lg font-semibold mb-4">Ingreso inicial (opcional)</h3>
 
                 <FormField
                   control={form.control}
@@ -190,10 +164,7 @@ export default function OnboardingPage() {
                     <FormItem>
                       <FormLabel>Descripción</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Ej: Sueldo mensual"
-                          {...field}
-                        />
+                        <Input placeholder="Ej: Sueldo mensual" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -212,16 +183,11 @@ export default function OnboardingPage() {
                           step="0.01"
                           placeholder="0.00"
                           {...field}
-                          onChange={(e) =>
-                            field.onChange(
-                              e.target.value ? parseFloat(e.target.value) : undefined
-                            )
-                          }
+                          value={field.value ?? ''}
+                          onChange={(e) => field.onChange(e.target.value ? parseFloat(e.target.value) : undefined)}
                         />
                       </FormControl>
-                      <FormDescription>
-                        Puedes agregar tu sueldo ahora o hacerlo después
-                      </FormDescription>
+                      <FormDescription>Puedes agregar tu sueldo ahora o hacerlo después.</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -238,4 +204,3 @@ export default function OnboardingPage() {
     </div>
   )
 }
-

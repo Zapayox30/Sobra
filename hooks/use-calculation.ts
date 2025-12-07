@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 import { useIncomes } from './use-incomes'
 import { useFixedExpenses, usePersonalExpenses } from './use-expenses'
 import { useMonthlyCommitments } from './use-commitments'
+import { useCardDues } from './use-credit-cards'
 import { calculateMonthlySobra } from '@/lib/finance/calc'
 
 export function useMonthlyCalculation(monthStart: Date = new Date()) {
@@ -13,9 +14,18 @@ export function useMonthlyCalculation(monthStart: Date = new Date()) {
     usePersonalExpenses()
   const { data: commitments = [], isLoading: commitmentsLoading } =
     useMonthlyCommitments()
+  const {
+    cardDueTotal = 0,
+    cardMinimumDue = 0,
+    nextDueDate,
+    overdue,
+    isLoading: cardLoading,
+    statements: cardStatements,
+    payments: cardPayments,
+  } = useCardDues(monthStart)
 
   const isLoading =
-    incomesLoading || fixedLoading || personalLoading || commitmentsLoading
+    incomesLoading || fixedLoading || personalLoading || commitmentsLoading || cardLoading
 
   const calculation = useMemo(() => {
     if (isLoading) return null
@@ -45,6 +55,7 @@ export function useMonthlyCalculation(monthStart: Date = new Date()) {
         start_month: new Date(c.start_month),
         end_month: new Date(c.end_month),
       })),
+      cardDueTotal,
     })
   }, [
     incomes,
@@ -52,6 +63,7 @@ export function useMonthlyCalculation(monthStart: Date = new Date()) {
     personalExpenses,
     commitments,
     monthStart,
+    cardDueTotal,
     isLoading,
   ])
 
@@ -62,6 +74,12 @@ export function useMonthlyCalculation(monthStart: Date = new Date()) {
     fixedExpenses,
     personalExpenses,
     commitments,
+    cardDueTotal,
+    cardMinimumDue,
+    nextDueDate,
+    overdue,
+    cardStatements,
+    cardPayments,
   }
 }
 

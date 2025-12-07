@@ -126,12 +126,14 @@ export default function CommitmentsPage() {
                       variant="outline"
                       size="sm"
                       onClick={() => handleEdit(commitment)}
+                      disabled={deleteCommitment.isPending}
                     >
                       <Edit className="h-3 w-3" />
                     </Button>
                     <Button
                       variant="outline"
                       size="sm"
+                      disabled={deleteCommitment.isPending}
                       onClick={() => {
                         if (
                           confirm(

@@ -99,6 +99,7 @@ export function useDeleteMonthlyCommitment() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['monthlyCommitments'] })
+      queryClient.invalidateQueries({ queryKey: ['monthlyCalculation'] })
       toast.success('Compromiso mensual eliminado exitosamente')
     },
     onError: (error) => {

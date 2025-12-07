@@ -100,6 +100,7 @@ export function useDeleteFixedExpense() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['fixedExpenses'] })
+      queryClient.invalidateQueries({ queryKey: ['monthlyCalculation'] })
       toast.success('Gasto fijo eliminado exitosamente')
     },
     onError: (error) => {
@@ -195,6 +196,7 @@ export function useDeletePersonalExpense() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['personalExpenses'] })
+      queryClient.invalidateQueries({ queryKey: ['monthlyCalculation'] })
       toast.success('Presupuesto personal eliminado exitosamente')
     },
     onError: (error) => {
