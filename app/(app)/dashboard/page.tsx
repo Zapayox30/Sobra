@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { LoadingSpinner } from '@/components/ui/loading-spinner'
+import { AlertsWidget } from '@/components/analytics/alerts-widget'
 import { useMonthlyCalculation } from '@/hooks/use-calculation'
 import { useProfile } from '@/hooks/use-user'
 import { formatCurrency } from '@/lib/finance/calc'
@@ -240,6 +241,9 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
           </div>
+
+          {/* Financial Anomaly Detection Alerts */}
+          <AlertsWidget />
 
           {/* Analytics Call-to-Action */}
           <Card className="border-border/70 bg-gradient-to-br from-card to-accent/5 hover:shadow-lg transition-all duration-300">

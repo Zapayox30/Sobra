@@ -192,9 +192,9 @@ export function Sidebar() {
             </button>
 
             {!collapsed && accountOpen && (
-              <div className="absolute bottom-full left-0 right-0 mb-4 text-sm">
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-3 shadow-inner">
-                  <div className="px-1 pb-2 text-xs text-white/70">
+              <div className="absolute left-full bottom-0 ml-4 text-sm w-64">
+                <div className="rounded-2xl border border-border bg-popover p-3 shadow-lg">
+                  <div className="px-1 pb-2 text-xs text-muted-foreground">
                     {user?.email}
                   </div>
                   <div className="space-y-1.5">
@@ -204,7 +204,7 @@ export function Sidebar() {
                         <Link
                           key={item.label}
                           href={item.href}
-                          className="flex items-center gap-2 rounded-xl px-2 py-2 text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+                          className="flex items-center gap-2 rounded-xl px-2 py-2 text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
                         >
                           <Icon className="h-4 w-4" />
                           <span>{item.label}</span>
@@ -212,7 +212,7 @@ export function Sidebar() {
                       )
                     })}
                     <button
-                      className="flex w-full items-center gap-2 rounded-xl px-2 py-2 text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+                      className="flex w-full items-center gap-2 rounded-xl px-2 py-2 text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
                       onClick={handleLogout}
                     >
                       <LogOut className="h-4 w-4" />

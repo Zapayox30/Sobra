@@ -442,6 +442,65 @@ export interface Database {
           updated_at?: string
         }
       }
+      financial_alerts: {
+        Row: {
+          id: string
+          user_id: string
+          alert_type: Database['public']['Enums']['alert_type']
+          severity: Database['public']['Enums']['alert_severity']
+          title: string
+          message: string
+          category: string | null
+          amount_spent: number | null
+          amount_average: number | null
+          amount_budget: number | null
+          percentage_diff: number | null
+          is_read: boolean
+          is_dismissed: boolean
+          action_url: string | null
+          created_at: string
+          read_at: string | null
+          dismissed_at: string | null
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          alert_type: Database['public']['Enums']['alert_type']
+          severity?: Database['public']['Enums']['alert_severity']
+          title: string
+          message: string
+          category?: string | null
+          amount_spent?: number | null
+          amount_average?: number | null
+          amount_budget?: number | null
+          percentage_diff?: number | null
+          is_read?: boolean
+          is_dismissed?: boolean
+          action_url?: string | null
+          created_at?: string
+          read_at?: string | null
+          dismissed_at?: string | null
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          alert_type?: Database['public']['Enums']['alert_type']
+          severity?: Database['public']['Enums']['alert_severity']
+          title?: string
+          message?: string
+          category?: string | null
+          amount_spent?: number | null
+          amount_average?: number | null
+          amount_budget?: number | null
+          percentage_diff?: number | null
+          is_read?: boolean
+          is_dismissed?: boolean
+          action_url?: string | null
+          created_at?: string
+          read_at?: string | null
+          dismissed_at?: string | null
+        }
+      }
     }
     Views: {
       [_ in never]: never
@@ -458,9 +517,24 @@ export interface Database {
           personal_total: number
         }[]
       }
+      mark_alert_as_read: {
+        Args: {
+          alert_id: string
+        }
+        Returns: Database['public']['Tables']['financial_alerts']['Row']
+      }
+      mark_all_alerts_as_read: {
+        Args: Record<string, never>
+        Returns: Database['public']['Tables']['financial_alerts']['Row'][]
+      }
+      get_unread_alert_count: {
+        Args: Record<string, never>
+        Returns: number
+      }
     }
     Enums: {
-      [_ in never]: never
+      alert_type: 'overspending' | 'under_budget' | 'no_activity' | 'achievement' | 'budget_warning' | 'goal_progress'
+      alert_severity: 'info' | 'warning' | 'critical' | 'success'
     }
   }
 }

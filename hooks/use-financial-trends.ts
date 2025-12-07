@@ -1,9 +1,9 @@
 'use client'
 
 import { useMemo } from 'react'
-import { useExpenses } from './use-expenses'
+import { useFixedExpenses, usePersonalExpenses } from './use-expenses'
 import { useIncomes } from './use-incomes'
-import { useCommitments } from './use-commitments'
+import { useMonthlyCommitments } from './use-commitments'
 import { startOfMonth, format, subMonths, parseISO } from 'date-fns'
 
 export interface MonthlyData {
@@ -44,9 +44,18 @@ const CATEGORY_COLORS: Record<string, string> = {
  * Hook to calculate financial trends over time
  */
 export function useFinancialTrends(monthsToShow: number = 6): TrendData {
-  const { data: expenses = [] } = useExpenses()
+  const { data: fixedExpenses = [] } = useFixedExpenses()
+  const { data: personalExpenses = [] } = usePersonalExpenses()
   const { data: incomes = [] } = useIncomes()
-  const { data: commitments = [] } = useCommitments()
+  const { data: commitments = [] } = useMonthlyCommitments()
+
+  // Combine both expense types
+  const expenses = useMemo(() => {
+    return [
+      ...fixedExpenses.map((exp) => ({ ...exp, expense_type: 'fixed' as const })),
+      ...personalExpenses.map((exp) => ({ ...exp, expense_type: 'personal' as const })),
+    ]
+  }, [fixedExpenses, personalExpenses])
 
   const trends = useMemo(() => {
     const now = new Date()
@@ -207,7 +216,7 @@ export function useFinancialTrends(monthsToShow: number = 6): TrendData {
       averageMonthlyExpenses,
       savingsRate,
     }
-  }, [expenses, incomes, commitments, monthsToShow])
+  }, [expenses, incomes, commitments, monthsToShow, fixedExpenses, personalExpenses])
 
   return trends
 }
