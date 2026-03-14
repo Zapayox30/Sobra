@@ -20,6 +20,9 @@
 # production
 /build
 
+# vscode (contains MCP tokens)
+.vscode/mcp.json
+
 # misc
 .DS_Store
 *.pem

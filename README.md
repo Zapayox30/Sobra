@@ -1,395 +1,252 @@
-# SOBRA
+# SOBRA 💰
 
-> Descubre cuánto te sobra después de tus ingresos y gastos. Gestiona tu dinero de forma simple y efectiva.
+**Tu sobrante, tu poder.** App de finanzas personales para Perú que te dice exactamente cuánto te sobra cada mes y te ayuda a hacer crecer ese dinero.
 
-## 📋 Tabla de Contenidos
+---
 
-- [Descripción](#-descripción)
-- [Stack Técnico](#-stack-técnico)
-- [Características](#-características)
-- [🎨 Sistema de Diseño](#-sistema-de-diseño)
-- [Prerequisitos](#-prerequisitos)
-- [Instalación](#-instalación)
-- [Configuración de Supabase](#-configuración-de-supabase)
-- [Estructura del Proyecto](#-estructura-del-proyecto)
-- [Desarrollo](#-desarrollo)
-- [Despliegue](#-despliegue)
-- [Arquitectura](#-arquitectura)
-- [Roadmap](#-roadmap)
+## 🎯 Visión
 
-## 🎯 Descripción
+Ser la app financiera de referencia en Perú que convierte el desorden monetario en claridad y acción — desde saber cuánto te sobra hasta invertir tu excedente de forma inteligente.
 
-**SOBRA** es una aplicación web de gestión financiera personal que te ayuda a:
+## 🚀 Misión
 
-1. Registrar tus ingresos (sueldo fijo + ingresos extra)
-2. Añadir tus gastos fijos (servicios, alquiler, suscripciones)
-3. Definir presupuestos personales (amigos, pareja, familia)
-4. Crear compromisos mensuales (ej: ahorrar $750 durante 4 meses)
-5. **Ver cuánto te SOBRA** realmente después de todo
+Ayudar a cada persona en Perú a responder con confianza: **"¿Cuánto me sobra este mes?"** y darle las herramientas para proteger, crecer y educar sus finanzas.
 
-La app calcula automáticamente tu dinero disponible y te sugiere cuánto puedes gastar por día.
+## 🏛️ Los 5 Pilares
+
+| # | Pilar | Descripción |
+|---|---|---|
+| 1 | **Cálculo de Sobrante** | Motor que calcula tu surplus real restando ingresos − gastos fijos − deudas − ahorro − compromisos − tarjetas. Te dice cuánto puedes gastar por día. |
+| 2 | **Colchón Financiero** | Fondo de emergencia inteligente. Te guía para construir 3–6 meses de respaldo según tu situación. |
+| 3 | **Consejos de Inversión** | Una vez que tienes sobrante y colchón, sugerencias personalizadas de dónde colocar tu dinero (depósitos a plazo, fondos mutuos, etc.). |
+| 4 | **Educación Financiera** | Tips contextuales dentro de la app que te enseñan a mejorar tus hábitos con tu propia data. |
+| 5 | **Conexión Bancaria** | Sincronización con BCP, Interbank, BBVA y Scotiabank vía Belvo API para importar movimientos automáticamente. |
+
+---
 
 ## 🛠 Stack Técnico
 
 ### Frontend
-- **Next.js 15** (App Router)
-- **TypeScript**
-- **TailwindCSS** + **shadcn/ui**
-- **TanStack Query** (React Query v5)
-- **React Hook Form** + **Zod**
 
-### Backend/BaaS
-- **Supabase**
-  - PostgreSQL (base de datos)
-  - Auth (autenticación)
-  - Row Level Security (RLS)
-  - Edge Functions (opcional)
+| Tecnología | Versión | Rol |
+|---|---|---|
+| Next.js | 16 | Framework (App Router, Turbopack) |
+| React | 19 | UI library |
+| TypeScript | 5 | Tipado estricto |
+| TailwindCSS | 4 | Estilos |
+| shadcn/ui | latest | Componentes UI (New York style) |
+| TanStack Query | 5 | Data fetching + caché |
+| React Hook Form | 7 | Formularios |
+| Zod | 4 | Validación de schemas |
+| Recharts | 3 | Gráficos |
+| Lucide | latest | Iconos |
 
-### Deploy
-- **Vercel** (frontend)
-- **Supabase Cloud** (backend)
+### Backend
 
-## ✨ Características
+| Tecnología | Rol |
+|---|---|
+| Supabase | BaaS (PostgreSQL 17, Auth, RLS) |
+| Row Level Security | Aislamiento de datos por usuario |
 
-### MVP (Versión Actual)
-- ✅ Autenticación con email/password
-- ✅ Onboarding inicial
-- ✅ Gestión de ingresos (sueldo, extras)
-- ✅ Gestión de gastos fijos
-- ✅ Presupuestos personales por categoría
-- ✅ Compromisos mensuales con duración limitada
-- ✅ Dashboard con cálculo automático de SOBRA
-- ✅ Sugerencia de gasto diario
-- ✅ Responsive design
+### Infraestructura
 
-### Plan Plus (Futuro)
-- 🔜 Historial extendido (24 meses)
-- 🔜 Gráficos avanzados
-- 🔜 Sistema de sobres/buckets
-- 🔜 Comparación entre meses
-- 🔜 Exportación a CSV/Excel
-- 🔜 Alertas automáticas
+| Servicio | Rol |
+|---|---|
+| Netlify | Deploy + CDN |
+| Supabase Cloud | Base de datos + Auth |
 
-## 🎨 Sistema de Diseño
+---
 
-SOBRA cuenta con una **identidad visual única** diseñada para transmitir crecimiento financiero y motivación.
+## 🏗 Arquitectura
 
-### 🎭 Identidad Visual
+### Principios
 
-**Logo:** Badge "SO$" + texto "SOBRA" con gradiente verde-dorado  
-**Colores Principales:**
-- 🟢 **Verde Financiero** - Crecimiento, estabilidad, dinero
-- 🟡 **Dorado Acento** - Logros, valor, metas cumplidas
+1. **Single Source of Truth** — Los tipos se generan desde la BD (`database.types.ts`) y se re-exportan centralizados desde `types/index.ts`
+2. **Funciones Puras** — La lógica financiera vive en `sobra-engine/` sin dependencias de framework
+3. **Seguridad por defecto** — RLS en todas las tablas, políticas owner-only, validación con Zod
+4. **Cero `any`** — TypeScript estricto en todo el codebase
 
-**Colores por Categoría:**
-- Verde → Ingresos
-- Naranja → Gastos
-- Morado → Compromisos
-- Azul → Presupuestos
+### Sobra Engine
 
-### ✨ Características de Diseño
+El corazón del producto. Motor de cálculo puro que computa el sobrante mensual:
 
-- **Animaciones sutiles** - fade-in, hover-lift, pulse
-- **Glassmorphism** - Header con backdrop-blur
-- **Gradientes de marca** - Verde a dorado
-- **Microinteracciones** - Feedback táctil en botones
-- **Cards con glow** - Efecto de brillo verde en hover
-- **Iconos con badges** - Círculos de color por categoría
+```
+gross_surplus = ingresos − gastos_fijos − deudas − ahorro − compromisos − tarjetas
+net_surplus   = gross_surplus − gastos_personales
 
-### 📚 Documentación de Diseño
-
-- **[DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md)** - Sistema completo de diseño
-- **[QUICK_REFERENCE.md](./QUICK_REFERENCE.md)** - Referencia rápida
-- **[DESIGN_SHOWCASE.md](./DESIGN_SHOWCASE.md)** - Showcase visual
-- **[CHANGELOG_DESIGN.md](./CHANGELOG_DESIGN.md)** - Registro de cambios
-
-### 🧩 Componentes Destacados
-
-```tsx
-// Logo reutilizable
-import { Logo } from '@/components/brand/logo'
-<Logo size="md" href="/dashboard" />
-
-// Button con gradiente
-<Button className="gradient-brand hover-lift">
-  Acción Principal
-</Button>
-
-// Card con identidad
-<Card className="hover-lift card-glow border-green-200 bg-gradient-to-br from-green-50 to-white">
-  {/* Contenido */}
-</Card>
+Clasificación del sobrante:
+  safe (50%)        → invertible
+  operative (30%)   → buffer operativo
+  unavailable (20%) → reserva de emergencia
 ```
 
-## 📦 Prerequisitos
+Calcula además la **sugerencia diaria** de gasto basada en los días restantes del mes.
 
-- **Node.js** 18+ y npm/pnpm
-- Cuenta en **Supabase** (gratis)
-- Cuenta en **Vercel** (gratis, opcional para deploy)
+### Base de Datos (20 tablas)
 
-## 🚀 Instalación
+```
+┌─ Usuarios ─────────────────────────────┐
+│ profiles · plans · user_plans          │
+├─ Ingresos y Gastos ───────────────────┤
+│ incomes · fixed_expenses               │
+│ personal_expenses · monthly_commitments │
+├─ Patrimonio ──────────────────────────┤
+│ accounts · wallets · debts             │
+│ savings_goals                          │
+├─ Tarjetas de Crédito ────────────────┤
+│ credit_cards · card_statements         │
+│ card_transactions · card_payments      │
+├─ Motor de Sobrante ──────────────────┤
+│ surplus_history                        │
+├─ Educación y Alertas ────────────────┤
+│ financial_tips · user_tips             │
+│ financial_alerts                       │
+├─ Conexiones Bancarias ───────────────┤
+│ bank_connections                       │
+└────────────────────────────────────────┘
+```
 
-### 1. Clonar el repositorio
+Todas las tablas tienen RLS habilitado con políticas `user_id = auth.uid()`.
+
+### Data Flow
+
+```
+Usuario → React Hook Form + Zod (validación)
+       → TanStack Query mutation
+       → Supabase Client (RLS)
+       → PostgreSQL
+
+PostgreSQL → Supabase Client
+           → TanStack Query (caché)
+           → Sobra Engine (cálculo puro)
+           → UI (componentes React)
+```
+
+---
+
+## 📁 Estructura del Proyecto
+
+```
+sobra/
+├── src/
+│   ├── app/                        # Rutas (Next.js App Router)
+│   │   ├── (auth)/                 # Login, registro, onboarding
+│   │   ├── (app)/                  # Rutas protegidas (dashboard, CRUD)
+│   │   ├── auth/callback/          # OAuth callback
+│   │   ├── contact/                # Página de contacto
+│   │   ├── pricing/                # Página de precios
+│   │   ├── layout.tsx              # Root layout (providers)
+│   │   └── page.tsx                # Landing page
+│   │
+│   ├── components/
+│   │   ├── auth/                   # Componentes de autenticación
+│   │   ├── charts/                 # Gráficos (Recharts)
+│   │   ├── forms/                  # Formularios (income, expense, commitment)
+│   │   ├── layout/                 # Header, sidebar, mobile-nav
+│   │   ├── metrics/                # Alertas y métricas
+│   │   ├── providers/              # QueryProvider, I18nProvider
+│   │   ├── ui/                     # shadcn/ui primitives
+│   │   ├── landing-content.tsx     # Contenido del landing
+│   │   └── logo.tsx                # Logo de SOBRA
+│   │
+│   ├── hooks/                      # Hooks de datos (10 hooks use-*.ts)
+│   │
+│   ├── lib/
+│   │   ├── sobra-engine/           # Motor de cálculo de sobrante
+│   │   ├── supabase/               # Clientes (browser, server, middleware)
+│   │   ├── validators/             # Schemas Zod
+│   │   ├── calc.ts                 # Funciones financieras
+│   │   ├── categories.ts           # Categorías de gastos
+│   │   ├── chart-utils.ts          # Utilidades para gráficos
+│   │   ├── thresholds.ts           # Umbrales de alertas
+│   │   ├── translations.ts         # Strings i18n (es/en)
+│   │   └── utils.ts                # cn() + serializeDates()
+│   │
+│   ├── types/
+│   │   ├── database.types.ts       # Auto-generado desde Supabase
+│   │   └── index.ts                # Re-exports centralizados (source of truth)
+│   │
+│   └── middleware.ts               # Auth middleware
+│
+├── supabase/
+│   └── migrations/
+│       └── v2_complete_schema.sql  # Schema completo (20 tablas)
+│
+├── public/                         # Assets estáticos (favicon, manifest, PWA icons)
+├── package.json
+├── tsconfig.json
+├── next.config.ts
+└── netlify.toml
+```
+
+---
+
+## 🚀 Setup
+
+### Prerequisitos
+
+- Node.js 20+ (ver `.nvmrc`)
+- Cuenta en Supabase
+
+### Instalación
 
 ```bash
-git clone <tu-repo>
+git clone <repo-url>
 cd sobra
-```
-
-### 2. Instalar dependencias
-
-```bash
 npm install
-```
-
-### 3. Configurar variables de entorno
-
-Copia el archivo de ejemplo:
-
-```bash
 cp env.example .env.local
+# Editar .env.local con tus credenciales de Supabase
 ```
 
-Edita `.env.local` con tus credenciales de Supabase:
+### Variables de Entorno
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_anon_key
 ```
 
-## 🗄️ Configuración de Supabase
-
-### 1. Crear proyecto en Supabase
-
-1. Ve a [supabase.com](https://supabase.com)
-2. Crea un nuevo proyecto
-3. Copia la URL y la `anon key` desde Project Settings > API
-
-### 2. Aplicar migraciones
-
-Puedes aplicar las migraciones de dos formas:
-
-#### Opción A: Desde el Dashboard de Supabase
-
-1. Ve a SQL Editor en tu proyecto Supabase
-2. Ejecuta los archivos SQL en orden:
-   - `supabase/migrations/001_initial_schema.sql`
-   - `supabase/migrations/002_row_level_security.sql`
-   - `supabase/migrations/003_rpc_functions.sql`
-
-#### Opción B: Con Supabase CLI
+### Desarrollo
 
 ```bash
-# Instalar Supabase CLI
-npm install -g supabase
-
-# Login
-supabase login
-
-# Link al proyecto
-supabase link --project-ref tu-project-ref
-
-# Aplicar migraciones
-supabase db push
+npm run dev          # Servidor local con Turbopack
+npm run build        # Build de producción
+npm run lint         # ESLint
+npm run type-check   # TypeScript sin emitir
 ```
-
-### 3. Verificar configuración
-
-Verifica que las tablas se crearon correctamente:
-
-```sql
--- En SQL Editor de Supabase
-SELECT table_name 
-FROM information_schema.tables 
-WHERE table_schema = 'public';
-```
-
-Deberías ver:
-- `profiles`
-- `plans`
-- `user_plans`
-- `incomes`
-- `fixed_expenses`
-- `personal_expenses`
-- `monthly_commitments`
-- `monthly_summaries`
-
-## 📁 Estructura del Proyecto
-
-```
-sobra/
-├── app/
-│   ├── (auth)/              # Rutas de autenticación
-│   │   ├── login/
-│   │   ├── register/
-│   │   └── onboarding/
-│   ├── (app)/               # Rutas protegidas
-│   │   ├── dashboard/
-│   │   ├── incomes/
-│   │   ├── expenses/
-│   │   ├── commitments/
-│   │   └── profile/
-│   ├── layout.tsx
-│   └── page.tsx
-├── components/
-│   ├── forms/               # Formularios reutilizables
-│   ├── layout/              # Header, Sidebar
-│   └── ui/                  # shadcn/ui components
-├── hooks/                   # React hooks personalizados
-│   ├── use-user.ts
-│   ├── use-incomes.ts
-│   ├── use-expenses.ts
-│   ├── use-commitments.ts
-│   └── use-calculation.ts
-├── lib/
-│   ├── finance/             # Lógica de dominio (cálculos)
-│   ├── providers/           # React Query provider
-│   ├── supabase/            # Clientes Supabase
-│   ├── validators/          # Schemas Zod
-│   └── utils.ts
-├── supabase/
-│   └── migrations/          # Migraciones SQL
-├── types/                   # Tipos TypeScript
-│   ├── database.types.ts
-│   └── index.ts
-└── middleware.ts            # Auth middleware
-```
-
-## 💻 Desarrollo
-
-### Iniciar servidor de desarrollo
-
-```bash
-npm run dev
-```
-
-Abre [http://localhost:3000](http://localhost:3000)
-
-### Comandos útiles
-
-```bash
-# Desarrollo
-npm run dev
-
-# Build
-npm run build
-
-# Producción local
-npm run start
-
-# Linting
-npm run lint
-
-# Generar tipos desde Supabase
-npx supabase gen types typescript --project-id <project-id> > types/database.types.ts
-```
-
-## 🌐 Despliegue
-
-### Deploy en Vercel
-
-1. Push tu código a GitHub
-2. Importa el proyecto en [vercel.com](https://vercel.com)
-3. Configura las variables de entorno:
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-4. Deploy automático ✅
-
-### Variables de entorno en producción
-
-Asegúrate de configurar las mismas variables que en `.env.local` en tu plataforma de deploy.
-
-## 🏗 Arquitectura
-
-### Base de Datos
-
-El esquema de base de datos está diseñado con:
-
-- **Normalización**: cada entidad en su tabla
-- **RLS (Row Level Security)**: cada usuario solo ve sus datos
-- **Índices optimizados**: búsquedas rápidas por `user_id` y fechas
-- **Triggers**: actualización automática de `updated_at`
-- **Computed columns**: `end_month` calculado automáticamente
-
-### Lógica de Cálculo
-
-La lógica financiera vive en `lib/finance/calc.ts` como **funciones puras** de TypeScript:
-
-```typescript
-calculateMonthlySobra({
-  monthStart,
-  incomes,
-  fixedExpenses,
-  personalBudgets,
-  commitments
-})
-```
-
-Esto permite:
-- ✅ Reutilización en web y móvil
-- ✅ Testing fácil
-- ✅ Sin dependencias de framework
-- ✅ Type-safe
-
-### Seguridad
-
-- **RLS activo** en todas las tablas
-- **Políticas owner-only**: cada usuario solo accede a sus datos
-- **Auth middleware**: rutas protegidas automáticamente
-- **Validación con Zod**: inputs validados antes de enviar a BD
-
-### Data Fetching
-
-Usamos **TanStack Query** para:
-- Caché automática
-- Invalidación optimista
-- Estados de loading/error
-- Revalidación en background
-
-## 📈 Roadmap
-
-### Semana 1-2 (Completado ✅)
-- [x] Setup proyecto Next.js + Supabase
-- [x] Migraciones SQL y RLS
-- [x] Sistema de autenticación
-- [x] CRUD de ingresos y gastos
-- [x] Lógica de cálculo financiero
-
-### Semana 3-4 (Completado ✅)
-- [x] Compromisos mensuales
-- [x] Dashboard con resultados
-- [x] UI/UX pulido
-- [x] Deploy a Vercel
-
-### Próximos pasos
-- [ ] Tests unitarios y E2E
-- [ ] Plan Plus con Stripe
-- [ ] Gráficos con Recharts
-- [ ] Sistema de sobres/buckets
-- [ ] Exportación de datos
-- [ ] App móvil (React Native/Expo)
-
-## 🤝 Contribuir
-
-1. Fork el proyecto
-2. Crea una rama (`git checkout -b feature/amazing-feature`)
-3. Commit tus cambios (`git commit -m 'Add amazing feature'`)
-4. Push a la rama (`git push origin feature/amazing-feature`)
-5. Abre un Pull Request
-
-## 📄 Licencia
-
-Este proyecto es privado. Todos los derechos reservados.
-
-## 🆘 Soporte
-
-Si tienes problemas:
-
-1. Revisa que las migraciones SQL se aplicaron correctamente
-2. Verifica las variables de entorno
-3. Comprueba que RLS está activo en Supabase
-4. Revisa los logs en Vercel y Supabase
 
 ---
 
-**Hecho con ❤️ para ayudarte a gestionar tu dinero**
+## 📈 Estado Actual
+
+### ✅ Implementado
+
+- Autenticación (email/password + Google OAuth)
+- Onboarding inicial con perfil
+- CRUD completo: ingresos, gastos fijos, gastos personales, compromisos
+- Tarjetas de crédito (estados de cuenta, transacciones, pagos)
+- Dashboard con cálculo automático de sobrante
+- Sugerencia de gasto diario
+- Gráficos (distribución de gastos, tendencia mensual, breakdown financiero)
+- Sistema de alertas financieras
+- i18n (español / inglés)
+- Responsive design
+- Deploy en Netlify
+
+### 🔜 Próximos Pasos
+
+- [ ] Cuentas bancarias y billeteras (UI)
+- [ ] Deudas y metas de ahorro (UI)
+- [ ] Historial de sobrante mensual
+- [ ] Pilar 2: Colchón financiero (guía de fondo de emergencia)
+- [ ] Pilar 3: Consejos de inversión personalizados
+- [ ] Pilar 4: Tips de educación financiera contextuales
+- [ ] Pilar 5: Conexión bancaria vía Belvo API
+- [ ] PWA (Progressive Web App)
+- [ ] Tests (Vitest + Playwright)
+- [ ] Plan Plus con Stripe
+
+---
+
+## 📄 Licencia
+
+Proyecto privado. Todos los derechos reservados.

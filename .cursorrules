@@ -1,20 +1,23 @@
 # SOBRA - Cursor Rules
 
 ## Proyecto Overview
-SOBRA es una aplicación de gestión financiera personal construida con Next.js 15 y Supabase.
+SOBRA es una aplicación de gestión financiera personal para Perú, construida con Next.js 16 y Supabase.
+Pilares: cálculo de sobrante, colchón financiero, consejos de inversión, educación financiera, conexión bancaria.
 
 ## Stack Técnico
-- Frontend: Next.js 15 (App Router), TypeScript, TailwindCSS, shadcn/ui
-- Backend: Supabase (PostgreSQL, Auth, RLS)
+- Frontend: Next.js 16 (App Router, Turbopack), TypeScript, TailwindCSS 4, shadcn/ui
+- Backend: Supabase (PostgreSQL 17, Auth, RLS)
 - Estado: TanStack Query v5
-- Validación: Zod + React Hook Form
+- Validación: Zod 4 + React Hook Form
+- Deploy: Netlify
 
 ## Convenciones de Código
 
 ### TypeScript
 - Usar tipos explícitos, evitar `any`
 - Preferir interfaces para objetos, types para uniones
-- Exportar tipos desde `types/index.ts`
+- Exportar tipos desde `src/types/index.ts` (derivan de database.types.ts)
+- Moneda por defecto: PEN (soles peruanos)
 
 ### Componentes React
 - Usar 'use client' solo cuando sea necesario
@@ -33,15 +36,18 @@ SOBRA es una aplicación de gestión financiera personal construida con Next.js 
 - Clases ordenadas: layout → spacing → typography → colors
 
 ### Validación
-- Schemas Zod en `lib/validators/index.ts`
+- Schemas Zod en `src/lib/validators/index.ts`
+- Zod 4: no usar genérico explícito en useForm con zodResolver (dejar que infiera)
+- Usar `serializeDates()` de `@/lib/utils` para convertir Date → string al enviar a Supabase
 - Validar en cliente (UX) y servidor (seguridad)
 - Mensajes de error en español
 
 ### Supabase
 - RLS siempre habilitado
-- Políticas owner-only por defecto
+- Políticas owner-only por defecto (user_id = auth.uid())
 - Índices en columnas de búsqueda
-- Usar tipos generados en `types/database.types.ts`
+- Usar tipos generados en `src/types/database.types.ts`
+- 20 tablas en BD v2 (profiles, incomes, fixed_expenses, personal_expenses, monthly_commitments, etc.)
 
 ### Data Fetching
 - TanStack Query para todas las queries
@@ -51,12 +57,15 @@ SOBRA es una aplicación de gestión financiera personal construida con Next.js 
 
 ### Estructura de Archivos
 ```
-app/          → Rutas Next.js
-components/   → Componentes React
-hooks/        → Hooks personalizados
-lib/          → Lógica de negocio
-types/        → Tipos TypeScript
-supabase/     → Migraciones SQL
+src/
+  app/          → Rutas Next.js (App Router)
+  components/   → Componentes React (ui/, forms/, layout/, charts/, metrics/, providers/)
+  hooks/        → Hooks personalizados (use-*.ts)
+  lib/          → Lógica de negocio (sobra-engine/, validators/, supabase/)
+  types/        → Tipos TypeScript (database.types.ts auto-generado, index.ts centralizado)
+  middleware.ts → Auth middleware
+supabase/       → Migraciones SQL
+public/         → Assets estáticos
 ```
 
 ## Patrones a Seguir
@@ -108,22 +117,14 @@ export function useDeleteEntity() { /* mutation */ }
 
 ## Comandos Útiles
 ```bash
-npm run dev              # Desarrollo
-npm run build            # Build
+npm run dev              # Desarrollo (Turbopack)
+npm run build            # Build producción
 npm run lint             # Linter
-npm run type-check       # TypeScript
-npm run supabase:types   # Generar tipos
 ```
-
-## Referencias
-- README.md - Documentación principal
-- ARCHITECTURE.md - Arquitectura técnica
-- DATABASE.md - Esquema de BD
-- EXAMPLES.md - Ejemplos de código
 
 ## Prioridades
 1. Seguridad (RLS, validación)
-2. Type-safety (TypeScript estricto)
+2. Type-safety (TypeScript estricto, cero `as any`)
 3. UX (loading, errores, feedback)
 4. Performance (índices, caché)
 5. Mantenibilidad (código limpio, documentado)
