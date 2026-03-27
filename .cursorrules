@@ -1,71 +1,100 @@
 # SOBRA - Cursor Rules
 
 ## Proyecto Overview
-SOBRA es una aplicación de gestión financiera personal para Perú, construida con Next.js 16 y Supabase.
-Pilares: cálculo de sobrante, colchón financiero, consejos de inversión, educación financiera, conexión bancaria.
+SOBRA es una aplicación de gestión financiera personal para Perú.
+Monorepo con npm workspaces: `apps/web`, `apps/mobile`, `packages/shared`.
+
+## Monorepo Structure
+- `apps/web/` — Web App (Next.js 16, TailwindCSS 4, shadcn/ui)
+- `apps/mobile/` — Mobile App (Expo 55, React Native)
+- `packages/shared/` — `@sobra/shared` (tipos, sobra-engine, constantes)
+- `supabase/` — Migraciones SQL compartidas
+
+## Código Compartido (@sobra/shared)
+- `@sobra/shared/types` — database.types.ts, Row types, Enums (ÚNICA fuente de verdad)
+- `@sobra/shared/engine` — Sobra Engine (cálculo puro), calc utilities
+- `@sobra/shared/constants` — Categorías de gastos
+
+**Regla**: Nunca duplicar tipos o lógica entre apps. Si se usa en ambas, va en `@sobra/shared`.
 
 ## Stack Técnico
-- Frontend: Next.js 16 (App Router, Turbopack), TypeScript, TailwindCSS 4, shadcn/ui
-- Backend: Supabase (PostgreSQL 17, Auth, RLS)
-- Estado: TanStack Query v5
-- Validación: Zod 4 + React Hook Form
-- Deploy: Netlify
+
+### Web (`apps/web/`)
+- Next.js 16 (App Router, Turbopack), TypeScript, TailwindCSS 4, shadcn/ui
+- TanStack Query v5, Zod 4 + React Hook Form
+- Deploy: Netlify (base: `apps/web/`)
+
+### Mobile (`apps/mobile/`)
+- Expo 55, React Native, React Navigation 7
+- TanStack Query v5
+- Auth: Supabase + Expo Secure Store
+
+### Backend (compartido)
+- Supabase (PostgreSQL 17, Auth, RLS)
 
 ## Convenciones de Código
 
 ### TypeScript
 - Usar tipos explícitos, evitar `any`
-- Preferir interfaces para objetos, types para uniones
-- Exportar tipos desde `src/types/index.ts` (derivan de database.types.ts)
+- Importar tipos desde `@/types` (re-exporta de `@sobra/shared`)
 - Moneda por defecto: PEN (soles peruanos)
 
-### Componentes React
-- Usar 'use client' solo cuando sea necesario
-- Preferir Server Components por defecto
-- Componentes en PascalCase
-- Props con interface explícita
+### Componentes React (Web)
+- 'use client' solo cuando sea necesario
+- Server Components por defecto
+- PascalCase
+
+### Componentes React Native (Mobile)
+- StyleSheet.create para estilos
+- Safe area con react-native-safe-area-context
+- Screens en PascalCase
 
 ### Hooks
 - Prefijo `use` obligatorio
-- Hooks de datos en `hooks/use-*.ts`
+- En `hooks/use-*.ts`
 - Retornar objetos con nombres descriptivos
 
-### Estilos
-- TailwindCSS para todo el styling
-- Usar componentes shadcn/ui cuando sea posible
-- Clases ordenadas: layout → spacing → typography → colors
-
 ### Validación
-- Schemas Zod en `src/lib/validators/index.ts`
-- Zod 4: no usar genérico explícito en useForm con zodResolver (dejar que infiera)
-- Usar `serializeDates()` de `@/lib/utils` para convertir Date → string al enviar a Supabase
-- Validar en cliente (UX) y servidor (seguridad)
+- Schemas Zod en `apps/web/src/lib/validators/`
 - Mensajes de error en español
-
-### Supabase
-- RLS siempre habilitado
-- Políticas owner-only por defecto (user_id = auth.uid())
-- Índices en columnas de búsqueda
-- Usar tipos generados en `src/types/database.types.ts`
-- 20 tablas en BD v2 (profiles, incomes, fixed_expenses, personal_expenses, monthly_commitments, etc.)
 
 ### Data Fetching
 - TanStack Query para todas las queries
 - Invalidar queries después de mutaciones
-- Toasts para feedback de mutaciones
-- Manejar loading y error states
+- Toasts/Alerts para feedback
 
 ### Estructura de Archivos
+
+#### Web (`apps/web/`)
 ```
-src/
+apps/web/src/
   app/          → Rutas Next.js (App Router)
-  components/   → Componentes React (ui/, forms/, layout/, charts/, metrics/, providers/)
-  hooks/        → Hooks personalizados (use-*.ts)
-  lib/          → Lógica de negocio (sobra-engine/, validators/, supabase/)
-  types/        → Tipos TypeScript (database.types.ts auto-generado, index.ts centralizado)
-  middleware.ts → Auth middleware
-supabase/       → Migraciones SQL
-public/         → Assets estáticos
+  components/   → Componentes React (ui/, forms/, layout/, charts/)
+  hooks/        → Hooks de datos
+  lib/          → Lógica web-only + re-exports de @sobra/shared
+  types/        → Re-exports de @sobra/shared/types
+```
+
+#### Mobile (`apps/mobile/`)
+```
+apps/mobile/src/
+  screens/      → Pantallas (auth/, main/)
+  components/   → Componentes UI nativos
+  hooks/        → Hooks de datos
+  lib/          → Re-exports de @sobra/shared + config local
+  navigation/   → React Navigation
+  providers/    → Auth, i18n
+  theme/        → Tema
+  types/        → Re-exports de @sobra/shared/types
+```
+
+#### Shared (`packages/shared/`)
+```
+packages/shared/src/
+  types/        → database.types.ts + index.ts
+  engine/       → sobra-engine.ts + calc.ts
+  constants/    → categories.ts
+  index.ts      → Barrel export
 ```
 
 ## Patrones a Seguir
@@ -79,53 +108,24 @@ export function useUpdateEntity() { /* mutation */ }
 export function useDeleteEntity() { /* mutation */ }
 ```
 
-### Form Pattern
-```typescript
-// components/forms/entity-form.tsx
-- Usar React Hook Form
-- Resolver con Zod
-- Props: entity?, onSuccess?
-- Modo create/edit según props
-```
-
-### Page Pattern
-```typescript
-// app/(app)/entity/page.tsx
-- Lista con estado vacío
-- Diálogo para create/edit
-- Confirmación para delete
-- Loading y error states
-```
-
-## Reglas Específicas
-
-### NO hacer
-- ❌ Exponer service_role_key al cliente
-- ❌ Usar `any` en TypeScript
-- ❌ Lógica de negocio en componentes
-- ❌ Queries sin índices en BD
-- ❌ Mutar estado sin invalidar queries
-- ❌ Console.logs en producción
-
-### SÍ hacer
-- ✅ Funciones puras para lógica de negocio
-- ✅ Separar UI de lógica
-- ✅ Validar inputs con Zod
-- ✅ Manejar errores gracefully
-- ✅ Toasts para feedback
-- ✅ Loading spinners
-
-## Comandos Útiles
+## Comandos
 ```bash
-npm run dev              # Desarrollo (Turbopack)
-npm run build            # Build producción
-npm run lint             # Linter
+# Desde la raíz
+npm run dev:web        # Desarrollo web
+npm run build:web      # Build web
+npm run dev:mobile     # Expo dev server
+
+# Desde apps/web/
+npm run dev            # Turbopack
+npm run build          # Producción
+
+# Desde apps/mobile/
+npm start              # Expo
 ```
 
 ## Prioridades
 1. Seguridad (RLS, validación)
-2. Type-safety (TypeScript estricto, cero `as any`)
+2. Type-safety (TypeScript estricto)
 3. UX (loading, errores, feedback)
-4. Performance (índices, caché)
-5. Mantenibilidad (código limpio, documentado)
-
+4. DRY (código compartido en @sobra/shared)
+5. Mantenibilidad
