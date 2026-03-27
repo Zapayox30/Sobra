@@ -1,33 +1,20 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { supabase } from '../lib/supabase'
-import type { Account, Wallet } from '../types'
+/**
+ * Accounts & Wallets hooks — powered by createCrudHooks factory
+ */
+import { createCrudHooks } from './create-crud-hooks'
 
-export function useAccounts() {
-  return useQuery({
-    queryKey: ['accounts'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('accounts')
-        .select('*')
-        .order('created_at', { ascending: false })
-      if (error) throw error
-      return data as Account[]
-    },
-    staleTime: 2 * 60_000,
-  })
-}
+// ── Accounts (bank, savings, investment) ──
+const accountHooks = createCrudHooks('accounts', ['surplus'])
 
-export function useWallets() {
-  return useQuery({
-    queryKey: ['wallets'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('wallets')
-        .select('*')
-        .order('created_at', { ascending: false })
-      if (error) throw error
-      return data as Wallet[]
-    },
-    staleTime: 2 * 60_000,
-  })
-}
+export const useAccounts = accountHooks.useList
+export const useCreateAccount = accountHooks.useCreate
+export const useUpdateAccount = accountHooks.useUpdate
+export const useDeleteAccount = accountHooks.useDelete
+
+// ── Wallets (Yape, Plin, cash) ──
+const walletHooks = createCrudHooks('wallets', ['surplus'])
+
+export const useWallets = walletHooks.useList
+export const useCreateWallet = walletHooks.useCreate
+export const useUpdateWallet = walletHooks.useUpdate
+export const useDeleteWallet = walletHooks.useDelete

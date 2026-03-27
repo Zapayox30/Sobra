@@ -20,7 +20,10 @@ export * from './engine'
 export {
   EXPENSE_CATEGORIES,
   FIXED_EXPENSE_CATEGORIES,
+  QUICK_ADD_CATEGORIES,
   getCategoryEmoji,
   getCategoryLabel,
+  getCategoryColor,
+  getCategoryInfo,
 } from './constants/categories'
-export type { ExpenseCategory, FixedExpenseCategory } from './constants/categories'
+export type { ExpenseCategory, FixedExpenseCategory, QuickAddCategory } from './constants/categories'

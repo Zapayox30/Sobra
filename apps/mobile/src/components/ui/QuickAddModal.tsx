@@ -12,23 +12,8 @@ import {
   Keyboard,
   ActivityIndicator
 } from 'react-native'
+import { QUICK_ADD_CATEGORIES } from '@sobra/shared'
 import { colors, spacing, fontSize, borderRadius } from '../../theme'
-
-interface Category {
-  id: string
-  label: string
-  icon: string
-  color: string
-}
-
-export const QUICK_CATEGORIES: Category[] = [
-  { id: 'comida', label: 'Comida', icon: '🍔', color: colors.amber },
-  { id: 'transporte', label: 'Transporte', icon: '🚕', color: colors.blue },
-  { id: 'supermercado', label: 'Supermercado', icon: '🛒', color: colors.emerald },
-  { id: 'ocio', label: 'Ocio', icon: '☕', color: colors.purple },
-  { id: 'salud', label: 'Salud', icon: '💊', color: colors.cyan },
-  { id: 'otros', label: 'Otros', icon: '📦', color: colors.textTertiary },
-]
 
 interface QuickAddModalProps {
   visible: boolean
@@ -39,7 +24,7 @@ interface QuickAddModalProps {
 
 export function QuickAddModal({ visible, onClose, onSave, isSubmitting }: QuickAddModalProps) {
   const [amount, setAmount] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState<Category>(QUICK_CATEGORIES[0])
+  const [selectedCategory, setSelectedCategory] = useState<typeof QUICK_ADD_CATEGORIES[number]>(QUICK_ADD_CATEGORIES[0])
   
   const inputRef = useRef<TextInput>(null)
 
@@ -47,7 +32,7 @@ export function QuickAddModal({ visible, onClose, onSave, isSubmitting }: QuickA
   useEffect(() => {
     if (visible) {
       setAmount('')
-      setSelectedCategory(QUICK_CATEGORIES[0])
+      setSelectedCategory(QUICK_ADD_CATEGORIES[0])
       setTimeout(() => inputRef.current?.focus(), 100)
     } else {
       Keyboard.dismiss()
@@ -57,7 +42,7 @@ export function QuickAddModal({ visible, onClose, onSave, isSubmitting }: QuickA
   const handleSave = () => {
     const num = parseFloat(amount.replace(',', '.'))
     if (!isNaN(num) && num > 0) {
-      onSave(num, selectedCategory.id, `${selectedCategory.icon} ${selectedCategory.label}`)
+      onSave(num, selectedCategory.value, `${selectedCategory.emoji} ${selectedCategory.label}`)
     }
   }
 
@@ -103,11 +88,11 @@ export function QuickAddModal({ visible, onClose, onSave, isSubmitting }: QuickA
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.pillsScroll}
             >
-              {QUICK_CATEGORIES.map(cat => {
-                const isSelected = selectedCategory.id === cat.id
+              {QUICK_ADD_CATEGORIES.map(cat => {
+                const isSelected = selectedCategory.value === cat.value
                 return (
                   <TouchableOpacity
-                    key={cat.id}
+                    key={cat.value}
                     onPress={() => setSelectedCategory(cat)}
                     activeOpacity={0.7}
                     style={[
@@ -115,7 +100,7 @@ export function QuickAddModal({ visible, onClose, onSave, isSubmitting }: QuickA
                       isSelected && { backgroundColor: cat.color + '20', borderColor: cat.color }
                     ]}
                   >
-                    <Text style={styles.pillIcon}>{cat.icon}</Text>
+                    <Text style={styles.pillIcon}>{cat.emoji}</Text>
                     <Text style={[
                       styles.pillLabel,
                       isSelected && { color: cat.color, fontWeight: '600' }

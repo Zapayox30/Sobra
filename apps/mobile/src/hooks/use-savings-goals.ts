@@ -1,76 +1,11 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { supabase } from '../lib/supabase'
-import type { SavingsGoal } from '../types'
-import type { TablesInsert, TablesUpdate } from '../types/database.types'
-import { Alert } from 'react-native'
+/**
+ * Savings Goals CRUD hooks — powered by createCrudHooks factory
+ */
+import { createCrudHooks } from './create-crud-hooks'
 
-export function useSavingsGoals() {
-  return useQuery({
-    queryKey: ['savingsGoals'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('savings_goals')
-        .select('*')
-        .order('created_at', { ascending: false })
-      if (error) throw error
-      return data as SavingsGoal[]
-    },
-    staleTime: 2 * 60_000,
-  })
-}
+const savingsHooks = createCrudHooks('savings_goals', ['surplus'])
 
-export function useCreateSavingsGoal() {
-  const qc = useQueryClient()
-  return useMutation({
-    mutationFn: async (g: Omit<TablesInsert<'savings_goals'>, 'user_id'>) => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) throw new Error('No user')
-      const { data, error } = await supabase
-        .from('savings_goals')
-        .insert({ ...g, user_id: user.id })
-        .select()
-        .single()
-      if (error) throw error
-      return data
-    },
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['savingsGoals'] })
-      qc.invalidateQueries({ queryKey: ['surplus'] })
-    },
-    onError: () => Alert.alert('Error', 'No se pudo crear'),
-  })
-}
-
-export function useUpdateSavingsGoal() {
-  const qc = useQueryClient()
-  return useMutation({
-    mutationFn: async ({ id, ...updates }: TablesUpdate<'savings_goals'> & { id: string }) => {
-      const { data, error } = await supabase
-        .from('savings_goals')
-        .update(updates)
-        .eq('id', id)
-        .select()
-        .single()
-      if (error) throw error
-      return data
-    },
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['savingsGoals'] })
-      qc.invalidateQueries({ queryKey: ['surplus'] })
-    },
-  })
-}
-
-export function useDeleteSavingsGoal() {
-  const qc = useQueryClient()
-  return useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase.from('savings_goals').delete().eq('id', id)
-      if (error) throw error
-    },
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['savingsGoals'] })
-      qc.invalidateQueries({ queryKey: ['surplus'] })
-    },
-  })
-}
+export const useSavingsGoals = savingsHooks.useList
+export const useCreateSavingsGoal = savingsHooks.useCreate
+export const useUpdateSavingsGoal = savingsHooks.useUpdate
+export const useDeleteSavingsGoal = savingsHooks.useDelete

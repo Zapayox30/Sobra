@@ -1,60 +1,23 @@
 import React from 'react'
-import { View, Text, ScrollView, StyleSheet, RefreshControl } from 'react-native'
-import { useSurplus, useSurplusHistory, useSaveSurplus } from '../../hooks/use-surplus'
-import { useProfile } from '../../hooks/use-auth'
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 import { usePrivacy } from '../../providers/PrivacyProvider'
 import { useI18n } from '../../lib/i18n'
+import { useDashboardData } from './Dashboard/useDashboardData'
 import { Card, MetricRow, Button, LoadingScreen, SectionHeader } from '../../components/ui'
 import { PieChart, BarChart } from 'react-native-gifted-charts'
 import { Eye, EyeOff } from 'lucide-react-native'
-import { TouchableOpacity } from 'react-native'
 import { colors, spacing, fontSize, borderRadius } from '../../theme'
 
 export default function DashboardScreen() {
   const { t } = useI18n()
-  const { surplus, isLoading, cardDueTotal, overdue } = useSurplus()
-  const { data: profile } = useProfile()
-  const { data: history = [] } = useSurplusHistory()
   const { isHidden, togglePrivacy, formatMoney } = usePrivacy()
-  const saveSurplus = useSaveSurplus()
-  const [refreshing, setRefreshing] = React.useState(false)
+  const { isLoading, displayData, chartData, saveSurplus } = useDashboardData()
 
-  if (isLoading) return <LoadingScreen />
+  if (isLoading || !displayData) return <LoadingScreen />
 
-  const s = surplus!
-  const monthName = new Date().toLocaleString('es-PE', { month: 'long', year: 'numeric' })
-  const isPositive = s.netSurplus >= 0
-
-  function handleSave() {
-    const month = new Date().toISOString().slice(0, 7)
-    saveSurplus.mutate({ surplus: s, month })
-  }
-
-  // --- Chart Data Preparation ---
-  const pieData: Array<{ value: number; color: string; text: string }> = [
-    { value: s.fixedTotal, color: colors.red, text: 'Fijos' },
-    { value: s.cardDueTotal + s.debtsTotal, color: colors.redDark, text: 'Deudas' },
-    { value: s.savingsCommitted, color: colors.blue, text: 'Ahorro' },
-    { value: s.personalTotal + s.commitmentsTotal, color: colors.textMuted, text: 'Varios' },
-  ].filter(d => d.value > 0)
-  
-  if (s.netSurplus > 0) {
-    pieData.push({ value: s.netSurplus, color: colors.emerald, text: 'Sobra' })
-  } else if (pieData.length === 0) {
-    // Escenario vacío
-    pieData.push({ value: 1, color: colors.border, text: 'Vacío' })
-  }
-
-  // History bar data
-  const barData = history.slice(0, 6).reverse().map(entry => {
-    const isPos = entry.net_surplus >= 0
-    // Usar gross si net es 0 pero hay algo, etc., o net
-    return {
-      value: Math.abs(entry.net_surplus),
-      frontColor: isPos ? colors.emerald : colors.red,
-      label: new Date(`${entry.month}-02`).toLocaleString('es-PE', { month: 'short' }),
-    }
-  })
+  const { monthName, isPositive, surplus, firstName } = displayData
+  const { pieData, barData } = chartData
+  const s = surplus
 
   return (
     <ScrollView
@@ -66,7 +29,7 @@ export default function DashboardScreen() {
       <View style={styles.headerRow}>
         <View>
           <Text style={styles.greeting}>
-            {t.greeting}{profile?.full_name ? `, ${profile.full_name.split(' ')[0]}` : ''} 👋
+            {t.greeting}{firstName ? `, ${firstName}` : ''} 👋
           </Text>
           <Text style={styles.monthLabel}>{monthName}</Text>
         </View>
@@ -179,7 +142,7 @@ export default function DashboardScreen() {
       {/* Save surplus */}
       <Button
         title={t.saveSurplus}
-        onPress={handleSave}
+        onPress={saveSurplus.save}
         variant="secondary"
         loading={saveSurplus.isPending}
       />

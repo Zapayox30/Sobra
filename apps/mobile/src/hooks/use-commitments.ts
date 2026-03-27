@@ -1,76 +1,11 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { supabase } from '../lib/supabase'
-import type { MonthlyCommitment } from '../types'
-import type { TablesInsert, TablesUpdate } from '../types/database.types'
-import { Alert } from 'react-native'
+/**
+ * Monthly Commitments CRUD hooks — powered by createCrudHooks factory
+ */
+import { createCrudHooks } from './create-crud-hooks'
 
-export function useCommitments() {
-  return useQuery({
-    queryKey: ['commitments'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('monthly_commitments')
-        .select('*')
-        .order('created_at', { ascending: false })
-      if (error) throw error
-      return data as MonthlyCommitment[]
-    },
-    staleTime: 2 * 60_000,
-  })
-}
+const commitmentHooks = createCrudHooks('monthly_commitments', ['surplus'])
 
-export function useCreateCommitment() {
-  const qc = useQueryClient()
-  return useMutation({
-    mutationFn: async (c: Omit<TablesInsert<'monthly_commitments'>, 'user_id'>) => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) throw new Error('No user')
-      const { data, error } = await supabase
-        .from('monthly_commitments')
-        .insert({ ...c, user_id: user.id })
-        .select()
-        .single()
-      if (error) throw error
-      return data
-    },
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['commitments'] })
-      qc.invalidateQueries({ queryKey: ['surplus'] })
-    },
-    onError: () => Alert.alert('Error', 'No se pudo crear'),
-  })
-}
-
-export function useUpdateCommitment() {
-  const qc = useQueryClient()
-  return useMutation({
-    mutationFn: async ({ id, ...updates }: TablesUpdate<'monthly_commitments'> & { id: string }) => {
-      const { data, error } = await supabase
-        .from('monthly_commitments')
-        .update(updates)
-        .eq('id', id)
-        .select()
-        .single()
-      if (error) throw error
-      return data
-    },
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['commitments'] })
-      qc.invalidateQueries({ queryKey: ['surplus'] })
-    },
-  })
-}
-
-export function useDeleteCommitment() {
-  const qc = useQueryClient()
-  return useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase.from('monthly_commitments').delete().eq('id', id)
-      if (error) throw error
-    },
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['commitments'] })
-      qc.invalidateQueries({ queryKey: ['surplus'] })
-    },
-  })
-}
+export const useCommitments = commitmentHooks.useList
+export const useCreateCommitment = commitmentHooks.useCreate
+export const useUpdateCommitment = commitmentHooks.useUpdate
+export const useDeleteCommitment = commitmentHooks.useDelete
