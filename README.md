@@ -103,3 +103,26 @@ npm start                      # Escanea el QR con Expo Go
 cd apps/web
 npm run dev                    # Corre el servidor en localhost:3000
 ```
+
+---
+
+## 🤝 Guía Rápida para Nuevos Desarrolladores (Onboarding)
+
+Si acabas de unirte a SOBRA o estás revisando el código por primera vez, aquí tienes el "TL;DR" de todo el proyecto para que puedas empezar a aportar valor en 10 minutos:
+
+### 1. ¿Cómo pensamos en SOBRA? (La Filosofía)
+No somos una app contable retrospectiva (no nos importa en qué gastaste el año pasado). Somos una app **Prospectiva**. El corazón de la aplicación es calcular y mostrar el **"Sobrante Diario"**. Tomamos el Saldo Actual, restamos todos los compromisos futuros y deudas, y arrojamos el presupuesto neto que el usuario puede gastar "hoy" sin remordimiento.
+
+### 2. El "Cerebro" está centralizado
+Nunca programes reglas de negocio o cálculos matemáticos sueltos en el Frontend Móvil o Web. 
+*   **Regla de Oro:** Todo cálculo de "Sobrante", sumatorias y lógicas de categorización viven en `packages/shared/src/engine/`. 
+*   Las interfaces de Expo y Next.js son "tontas", solo consumen los `hooks` desde ese paquete central.
+
+### 3. Seguridad Paranoica (Zero Trust)
+*   **En Móviles:** Usamos **bloqueo Biométrico Obligatorio** (`SecurityProvider` a nivel de `App.tsx`) cuando la app pasa al fondo. Nunca muestres saldos en la primera renderización sin pasar por este Provider. También existe un Modo Privado que reemplaza strings por asteriscos; úsalo con el hook `usePrivacy()`.
+*   **En la Nube:** Ninguna tabla en Supabase puede existir sin **Row Level Security (RLS)**. Asegúrate de verificar que cada petición de `SELECT`/`UPDATE`/`INSERT` valide `auth.uid() = user_id`. Puedes leer esto en `009_security_hardening.sql`.
+
+### 4. Estilo y Frictionless UI
+Si vas a diseñar una pantalla para la App Móvil, recuerda que **nuestro estándar es que todo debe tomar menos de 3 segundos**. (Referencia: `QuickAddModal.tsx`). Usa botones nativos enormes, invoca el teclado numérico automático, y evita formularios aburridos de texto.
+
+¡Bienvenido(a) a SOBRA! 🚀
